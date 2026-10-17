@@ -1,11 +1,11 @@
 # Design Solution Definition: `Haptics`
 
 > **Project:** `Haptics`
-> **Document ID:** `DSD-<NNN>-<SHORT-NAME>`
-> **Version:** `0.1.0` · **Status:** `Draft | In Review | Approved | Superseded`
+> **Document ID:** `DSD-<01>-<Haptics>`
+> **Version:** `0.1.0` · **Status:** `Draft`
 > **Project phase:** `<Prototype>`
 > **Last modified:** `2026-10-17`
-> **Repository path:** `docs/design/<name>/README.md`
+> **Repository path:** `Haptics-2026/SDR/DSD_Haptics-01.md`
 
 
 HOW TO USE THIS TEMPLATE
