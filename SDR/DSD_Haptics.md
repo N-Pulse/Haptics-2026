@@ -1,10 +1,10 @@
-# Design Solution Definition: `<Subsystem / Module Name>`
+# Design Solution Definition: `Haptics`
 
-> **Project:** `<Project name>`
+> **Project:** `Haptics`
 > **Document ID:** `DSD-<NNN>-<SHORT-NAME>`
 > **Version:** `0.1.0` · **Status:** `Draft | In Review | Approved | Superseded`
-> **Project phase:** `<e.g. Concept / Proof of Concept / Prototype / Release>`
-> **Last modified:** `YYYY-MM-DD`
+> **Project phase:** `<Prototype>`
+> **Last modified:** `2026-10-17`
 > **Repository path:** `docs/design/<name>/README.md`
 
 
