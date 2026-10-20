@@ -46,12 +46,11 @@ void loop() {
  // raw_thumb, raw_index, raw_middle, raw_flex,
   //filtered_thumb, filtered_index, filtered_middle, filtered_flex); //to see the values, to have an actual range for mapping function 
 
-  int packet[5];
+  int packet[4];
   packet[0] = pressureThreshold(filtered_thumb);
   packet[1]  = pressureThreshold(filtered_index);
   packet[2] = pressureThreshold(filtered_middle);
   packet[3] = flexionThreshold(filtered_flex);
-  packet[4] = readTemperatureTenthsC();
 
   pCharacteristic->setValue((uint8_t*)packet, sizeof(packet));
   pCharacteristic->notify();

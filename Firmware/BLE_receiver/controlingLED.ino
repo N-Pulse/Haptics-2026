@@ -1,15 +1,14 @@
+const int TEMP_THRESHOLD_C = 40.0; //threshold to be determined 
 
-// 400 = 40.0°C
-const int TEMP_THRESHOLD_TENTHS_C = 400; //threshold to be determined 
-
-void setupTempLEDs(int hotPin, int normalPin) {
+void setupTempLEDs(int hotPin, int bluetoothPin) {
   pinMode(hotPin, OUTPUT);
-  pinMode(normalPin, OUTPUT);
+  pinMode(bluetoothPin, OUTPUT);
 }
 
-// rawTempTenths is the value received over BLE (°C × 10)
-void updateTempLEDs(int hotPin, int normalPin, int rawTempTenths) {
-  bool overheating = rawTempTenths > TEMP_THRESHOLD_TENTHS_C;
-  digitalWrite(hotPin, overheating ? HIGH : LOW);
-  digitalWrite(normalPin, overheating ? LOW : HIGH);
+void updateHotLED(int hotPin, float temp) {
+  digitalWrite(hotPin, temp > TEMP_THRESHOLD_C ? HIGH : LOW);
+}
+
+void updateBluetoothLED(int bluetoothPin, bool isConnected) {
+  digitalWrite(bluetoothPin, isConnected ? HIGH : LOW);
 }
