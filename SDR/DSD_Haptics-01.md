@@ -1,11 +1,11 @@
-# Design Solution Definition: `<Subsystem / Module Name>`
+# Design Solution Definition: `Haptics`
 
-> **Project:** `<Project name>`
-> **Document ID:** `DSD-<NNN>-<SHORT-NAME>`
-> **Version:** `0.1.0` · **Status:** `Draft | In Review | Approved | Superseded`
-> **Project phase:** `<e.g. Concept / Proof of Concept / Prototype / Release>`
-> **Last modified:** `YYYY-MM-DD`
-> **Repository path:** `docs/design/<name>/README.md`
+> **Project:** `Haptics`
+> **Document ID:** `DSD-<01>-<Haptics>`
+> **Version:** `0.1.0` · **Status:** `Draft`
+> **Project phase:** `Prototype`
+> **Last modified:** `2026-10-17`
+> **Repository path:** `Haptics-2026/SDR/DSD_Haptics-01.md`
 
 
 HOW TO USE THIS TEMPLATE
@@ -24,7 +24,7 @@ HOW TO USE THIS TEMPLATE
 
 | Role | Name | Affiliation / Handle | Date | Signature / Review link |
 |---|---|---|---|---|
-| Author(s) | | | | |
+| Author(s) | Ana Benavente| | | |
 | Reviewer (technical) | | | | |
 | Concurrence (SE Reviewer) | | | | |
 | Concurrence (Quality management reviewer) | | | | |
@@ -37,7 +37,7 @@ HOW TO USE THIS TEMPLATE
 
 | Version | Date | Author(s) | Main changes | PR / Commit |
 |---|---|---|---|---|
-| 1.0.0 | YYYY-MM-DD | | First version | |
+| 0.1.0 | 2026-10-17 | Ana Benavente | First version | |
 
 ---
 
@@ -89,7 +89,7 @@ proposed (issue, RFC, pull request)? -->
 
 | Term | Definition |
 |---|---|
-| `<TERM>` | `<Definition>` |
+| `PCB` | `<Printed Circuit Board>` |
 
 > <span style='color: red;'>EXAMPLE</span>
 >
