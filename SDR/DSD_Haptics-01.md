@@ -89,6 +89,7 @@ proposed (issue, RFC, pull request)? -->
 
 | Term | Definition |
 |---|---|
+| `BLE` | `<Bluetooth Low Energy>` |
 | `GND` | `<Ground>` |
 | `MCU` | `<Microcontroller Unit>` |
 | `PCB` | `<Printed Circuit Board>` |
@@ -196,15 +197,43 @@ flowchart LR
 <!-- One subsection per significant choice. Use this pattern:
 Decision · Rationale · Requirements addressed · Consequences. -->
 
-#### 3.2.1 `<Design choice name>`
+#### 3.2.1 `<Battery and power system>`
 
-- **Decision:** `<what was chosen>`
-- **Rationale:** `<why, with evidence or references>`
+- **Decision:** `<Power the bracelet using a 7.4 V 2S Li-ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the thermistor.>`
+- **Rationale:** `<Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail.>`
 - **Requirements addressed:** `REQ-xxx, REQ-yyy`
-- **Consequences / limitations:** `<what this commits us to or rules out>`
+- **Consequences / limitations:** `<Need of 2S protection board and charger, and visible warning of temperature as well as thermometer calibration.>`
+
+#### 3.2.2 `<Wireless communication>`
+
+- **Decision:** `<Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.>`
+- **Rationale:** `<BLE is built onto the chip and is low power, removing any wires between the prosthesis and bracelet, allowing the user to manipulate the bracelet separately.>`
+- **Requirements addressed:** `REQ-xxx, REQ-yyy`
+- **Consequences / limitations:** `<Latency and range depend on BLE.>`
+
+#### 3.2.3 `<Pressure sensors and circuit>`
+
+- **Decision:** `<Use resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.>`
+- **Rationale:** `<Thin, low-cost, responsive to light contact, and low-power.>`
+- **Requirements addressed:** `REQ-xxx, REQ-yyy`
+- **Consequences / limitations:** `<Need of calibration, has a non-linear response, and a sensitivity trade-off for ranges.>`
+
+#### 3.2.4 `<Vibration feedback>`
+
+- **Decision:** `Render the pressure measured at the prosthesis as vibration on the skin, with the intensity increasing with the pressure.`
+- **Rationale:** `<Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light.>`
+- **Requirements addressed:** `REQ-xxx, REQ-yyy`
+- **Consequences / limitations:** `<Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.>`
+
+#### 3.2.5 `<Servomotor feedback>`
+
+- **Decision:** `Render the prosthesis's wrist position (flexion/extension), given by the wrist motor position, as a movement of a servomotor mechanism on the bracelet.`
+- **Rationale:** `<Motion following the natural direction and position of the wrist intuitively.>`
+- **Requirements addressed:** `REQ-xxx, REQ-yyy`
+- **Consequences / limitations:** `<Adds to power draw, size and mechanical & electrical complexity, must be comfortable and safe, and range must be matched to wrist movement also limited by latency.>`
 
 
-#### 3.2.2 Operating modes
+#### 3.2.6 Operating modes
 
 <!-- For instruments: operating modes. For protocols and pipelines: workflow
 stages. Include entry and exit conditions and what is active in each. -->
