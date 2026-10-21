@@ -158,14 +158,6 @@ the requirements this design directly addresses. -->
 `docs/figures/`. Include interfaces: data, mechanical, electrical,
 biological/sample flow, and user interaction. -->
 
-```mermaid
-flowchart LR
-    A[Input: sample / signal] --> B[Module 1]
-    B --> C[Module 2]
-    C --> D[Output: result / product]
-    E[Control software] --> B
-    E --> C
-```
 
 ```mermaid
 flowchart LR
@@ -175,7 +167,7 @@ flowchart LR
     end
 
     subgraph BRC["Haptic bracelet"]
-        MCU["Control unit (MCU with BLE)"]
+        MCU["MCU"]
         VIB["Vibration motors"]
         SRV["Servomotor mechanism"]
         PWR["Battery and power management"]
@@ -183,20 +175,20 @@ flowchart LR
 
     USER["User"]
 
-    S -->|"Data: pressure over BLE"| MCU
-    W -->|"Data: wrist movement over BLE"| MCU
-    MCU -->|"Electrical: motor control"| VIB
-    MCU -->|"Electrical: motor control"| SRV
-    VIB -->|"Mechanical: vibration"| USER
-    SRV -->|"Mechanical: movement"| USER
-    PWR -.->|"Electrical: power"| MCU
-    PWR -.->|"Electrical: power"| VIB
-    PWR -.->|"Electrical: power"| SRV
-    USER -->|"User interaction: on / off"| PWR
+    S -->|"Pressure sensor data (BLE)"| MCU
+    W -->|"Wrist motor position (BLE)"| MCU
+    MCU -->|"Vibration motor control"| VIB
+    MCU -->|"Servomotor control"| SRV
+    VIB -->|"Vibration"| USER
+    SRV -->|"Movement"| USER
+    PWR -->|"Power (3.3 V)"| MCU
+    PWR -->|"Power (3.3 V)"| VIB
+    PWR -->|"Power (5 V)"| SRV
+    USER -->|"User interaction (on/off)"| PWR
 
 ```
 
-*Figure 3.1: High-level architecture of `<subsystem>`.*
+*Figure 3.1: High-level architecture of `<Haptics>`.*
 
 
 ### 3.2 Main design choices
