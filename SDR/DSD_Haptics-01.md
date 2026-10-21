@@ -24,7 +24,7 @@ HOW TO USE THIS TEMPLATE
 
 | Role | Name | Affiliation / Handle | Date | Signature / Review link |
 |---|---|---|---|---|
-| Author(s) | Ana Benavente | Team Leader @anabenaventez-hub | | |
+| Author(s) | Ana Benavente | Team Leader / anabenaventez-hub | | |
 | Reviewer (technical) | | | | |
 | Concurrence (SE Reviewer) | | | | |
 | Concurrence (Quality management reviewer) | | | | |
@@ -64,8 +64,8 @@ and what decision does it support? State what is IN and OUT of scope.
 
 DO NOT CHANGE ANYTHING IN THIS SECTION EXCEPT THE HIGHLIGHTED SECTIONS -->
 
-This Design Solution Definition (DSD) is at a `<Concept / Proof of concept / Prototype / Public Release >` stage
-validated on `<date>`. It justifies the concept selected for `<subsystem>`.
+This Design Solution Definition (DSD) is at a `<Prototype>` stage
+validated on `<date>`. It justifies the concept selected for `<Haptics>`.
 
 It covers:
 
@@ -74,15 +74,15 @@ It covers:
 - the concepts that were considered and not retained
 - risks, quality, and compliance implications.
 
-**Out of scope:** `<list explicitly if you have another document that covers another part of the design. If nothing relevent put Not Applicable>`
+**Out of scope:** `<Not relevant.>`
 
 ### 1.2 Responsibility and change authority
 
 <!-- Who owns this document? Who may approve changes? How are changes
 proposed (issue, RFC, pull request)? -->
 
-- **Document owner:** `<name / team>` <!-- Who is responsible to keep this document up to date ? --> 
-- **Change authority:** `<role / committee>` <!-- What is the role/responsibility of the person -->
+- **Document owner:** `<Ana Benavente / Haptics >` <!-- Who is responsible to keep this document up to date ? --> 
+- **Change authority:** `<Team Leader / N-Pulse>` <!-- What is the role/responsibility of the person -->
 
 
 ### 1.3 Abbreviated terms and definitions
