@@ -3,7 +3,7 @@
 > **Project:** `Haptics`
 > **Document ID:** `DSD-01-Haptics`
 > **Version:** `0.1.0` · **Status:** `Draft`
-> **Project phase:** `Prototype`
+> **Project phase:** `Proof of concept`
 > **Last modified:** `2026-10-17`
 > **Repository path:** `Haptics-2026/SDR/DSD_Haptics-01.md`
 
@@ -64,7 +64,7 @@ and what decision does it support? State what is IN and OUT of scope.
 
 DO NOT CHANGE ANYTHING IN THIS SECTION EXCEPT THE HIGHLIGHTED SECTIONS -->
 
-This Design Solution Definition (DSD) is at a `Prototype` stage
+This Design Solution Definition (DSD) is at a `Proof of concept` stage
 validated on `<date>`. It justifies the concept selected for `Haptics`.
 
 It covers:
