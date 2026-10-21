@@ -170,40 +170,30 @@ flowchart LR
 ```mermaid
 flowchart LR
     subgraph PROS["Prosthesis"]
-        S["3 pressure sensors"]
-        W["Wrist motor position (extension / flexion)"]
+        S["Pressure sensors"]
+        W["Wrist position"]
     end
 
-    subgraph BRC["Haptic bracelet (subsystem)"]
-        MCU["ESP32-C3 microcontroller with BLE"]
-        DRV["Vibration motor drivers: MOSFET and flyback diode"]
-        MOT["Vibration motors"]
+    subgraph BRC["Haptic bracelet"]
+        MCU["Control unit (MCU with BLE)"]
+        VIB["Vibration motors"]
         SRV["Servomotor mechanism"]
-        PWR["Battery 7.4 V, switch and buck converters 3.3 V and 5 V"]
-        NTC["NTC thermistor on battery pack"]
-        LED["Status LEDs: BLE and over-temperature"]
+        PWR["Battery and power management"]
     end
 
-    USER["User: skin and tactile perception"]
+    USER["User"]
 
-    S -->|"Data: pressure readings over BLE"| MCU
-    W -->|"Data: wrist position over BLE"| MCU
-    MCU -->|"Electrical: PWM, low / medium / high"| DRV
-    DRV -->|"Electrical: switched motor current"| MOT
-    MOT -->|"Mechanical: vibration on skin"| USER
-    MCU -->|"Electrical: servo control signal"| SRV
-    SRV -->|"Mechanical: movement on skin"| USER
-    USER -.->|"Biological: tactile sensation"| MOT
+    S -->|"Data: pressure over BLE"| MCU
+    W -->|"Data: wrist movement over BLE"| MCU
+    MCU -->|"Electrical: motor control"| VIB
+    MCU -->|"Electrical: motor control"| SRV
+    VIB -->|"Mechanical: vibration"| USER
+    SRV -->|"Mechanical: movement"| USER
+    PWR -.->|"Electrical: power"| MCU
+    PWR -.->|"Electrical: power"| VIB
+    PWR -.->|"Electrical: power"| SRV
+    USER -->|"User interaction: on / off"| PWR
 
-    NTC -->|"Electrical: analog temperature signal"| MCU
-    MCU -->|"Electrical: LED drive"| LED
-    LED -->|"User interaction: status light"| USER
-    USER -->|"User interaction: on / off switch"| PWR
-
-    PWR -.->|"Electrical: 3.3 V supply"| MCU
-    PWR -.->|"Electrical: 3.3 V supply"| DRV
-    PWR -.->|"Electrical: 3.3 V supply"| MOT
-    PWR -.->|"Electrical: 5 V supply"| SRV
 ```
 
 *Figure 3.1: High-level architecture of `<subsystem>`.*
