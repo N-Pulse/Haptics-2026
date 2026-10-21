@@ -200,35 +200,35 @@ flowchart LR
 <!-- One subsection per significant choice. Use this pattern:
 Decision · Rationale · Requirements addressed · Consequences. -->
 
-#### 3.2.1 `<Battery and power system>`
+#### 3.2.1 `Battery and power system`
 
 - **Decision:** `Power the bracelet using a 7.4 V 3400 mAh 2S Li-ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the thermistor.`
 - **Rationale:** `Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail, with a usage of minimum 4 hours.`
 - **Requirements addressed:** `HA-001, HA-011, SYS-034, SYS-019, SYS-020, SYS-018, SYS-010, SAF-008.`
 - **Consequences / limitations:** `Need of 2S protection board and charger, and visible warning of temperature as well as thermometer calibration.`
 
-#### 3.2.2 `<Wireless communication>`
+#### 3.2.2 `Wireless communication`
 
 - **Decision:** `Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.>`
 - **Rationale:** `BLE is built onto the chip and is low power, removing any wires between the prosthesis and bracelet, allowing the user to manipulate the bracelet separately.`
 - **Requirements addressed:** `HA-009, SYS-029, SYS-016, SYS-017.`
 - **Consequences / limitations:** `Latency and range depend on BLE.`
 
-#### 3.2.3 `<Pressure sensors and circuit>`
+#### 3.2.3 `Pressure sensors and circuit`
 
 - **Decision:** `Use resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.`
 - **Rationale:** `Thin, low-cost, responsive to light contact, and low-power.`
 - **Requirements addressed:** `HA-004, HA-005, HA-006, HA-007, HA-008, HA-009, HA-010, SYS-028, SYS-021, SYS-011.`
 - **Consequences / limitations:** `Need of calibration, has a non-linear response, and a sensitivity trade-off for ranges.`
 
-#### 3.2.4 `<Vibration feedback>`
+#### 3.2.4 `Vibration feedback`
 
 - **Decision:** `Render the pressure measured at the prosthesis as vibration on the skin, with the intensity increasing with the pressure.`
 - **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light.`
 - **Requirements addressed:** `HA-002, HA-003, HA-004, HA-005, HA-006, HA-007, HA-008, SYS-031, SYS-028, SYS-021, SYS-011.`
 - **Consequences / limitations:** `Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.`
 
-#### 3.2.5 `<Servomotor feedback>`
+#### 3.2.5 `Servomotor feedback`
 
 - **Decision:** `Render the prosthesis's wrist position (flexion/extension), given by the wrist motor position, as a movement of a servomotor mechanism on the bracelet.`
 - **Rationale:** `Motion following the natural direction and position of the wrist intuitively.`
@@ -245,10 +245,8 @@ stages. Include entry and exit conditions and what is active in each. -->
 |---|---|---|---|---|
 | Idle | Wait for the prosthesis to connect with minimal power use and no output to the user.|Power switch turned on and boot finished, or BLE link lost while no fault is present.  | BLE connection established with the prosthesis (goes to Nominal) or a fault is detected (goes to Safe / fault).| MCU with BLE advertising, power management (buck converters), BLE status LED. Vibration motors, servomotor and drivers are off.|
 | Nominal operation |Convert incoming pressure and wrist position data into vibration and servomotor feedback. |BLE connected and valid data being received.|BLE link lost or no data (goes to Idle), fault detected (goes to Safe / fault), or power switch off. | MCU and BLE, vibration motors with their drivers (PWM), servomotor, battery and power rails, NTC temperature monitoring. |
-| 
-Calibration | Set the pressure thresholds for the vibration levels, and the servomotor range for the wrist’s flexion and extension.| | | |
-| 
-Safe / fault state | Protect the user and the hardware by stopping the outputs when battery's temperature rises or the switch is turned off.|Battery temperature above 40 °C or turned off manually | Condition cleared (goes to Idle), or a latched fault requires the user to switch off and on. | MCU, temperature monitoring (NTC), over-temperature LED. Vibration motors and servomotor are disabled. BLE can stay on to report the fault.|
+| Calibration | Set the pressure thresholds for the vibration levels, and the servomotor range for the wrist’s flexion and extension.| | | |
+| Safe / fault state | Protect the user and the hardware by stopping the outputs when battery's temperature rises or the switch is turned off.|Battery temperature above 40 °C or turned off manually | Condition cleared (goes to Idle), or a latched fault requires the user to switch off and on. | MCU, temperature monitoring (NTC), over-temperature LED. Vibration motors and servomotor are disabled. BLE can stay on to report the fault.|
 
 ### 3.3 Functionally linked systems
 
