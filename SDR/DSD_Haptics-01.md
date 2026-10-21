@@ -24,7 +24,7 @@ HOW TO USE THIS TEMPLATE
 
 | Role | Name | Affiliation / Handle | Date | Signature / Review link |
 |---|---|---|---|---|
-| Author(s) | Ana Benavente| | | |
+| Author(s) | Ana Benavente | Team Leader @anabenaventez-hub | | |
 | Reviewer (technical) | | | | |
 | Concurrence (SE Reviewer) | | | | |
 | Concurrence (Quality management reviewer) | | | | |
