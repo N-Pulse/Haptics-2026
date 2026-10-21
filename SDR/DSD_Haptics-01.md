@@ -89,7 +89,11 @@ proposed (issue, RFC, pull request)? -->
 
 | Term | Definition |
 |---|---|
+| `GND` | `<Ground>` |
+| `MCU` | `<Microcontroller Unit>` |
 | `PCB` | `<Printed Circuit Board>` |
+
+
 
 > <span style='color: red;'>EXAMPLE</span>
 >
