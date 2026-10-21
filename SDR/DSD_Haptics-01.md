@@ -1,7 +1,7 @@
 # Design Solution Definition: `Haptics`
 
 > **Project:** `Haptics`
-> **Document ID:** `DSD-<01>-<Haptics>`
+> **Document ID:** `DSD-01-Haptics`
 > **Version:** `0.1.0` · **Status:** `Draft`
 > **Project phase:** `Prototype`
 > **Last modified:** `2026-10-17`
@@ -64,8 +64,8 @@ and what decision does it support? State what is IN and OUT of scope.
 
 DO NOT CHANGE ANYTHING IN THIS SECTION EXCEPT THE HIGHLIGHTED SECTIONS -->
 
-This Design Solution Definition (DSD) is at a `<Prototype>` stage
-validated on `<date>`. It justifies the concept selected for `<Haptics>`.
+This Design Solution Definition (DSD) is at a `Prototype` stage
+validated on `<date>`. It justifies the concept selected for `Haptics`.
 
 It covers:
 
@@ -74,28 +74,28 @@ It covers:
 - the concepts that were considered and not retained
 - risks, quality, and compliance implications.
 
-**Out of scope:** `<Not relevant.>`
+**Out of scope:** `Not relevant.`
 
 ### 1.2 Responsibility and change authority
 
 <!-- Who owns this document? Who may approve changes? How are changes
 proposed (issue, RFC, pull request)? -->
 
-- **Document owner:** `<Ana Benavente / Haptics >` <!-- Who is responsible to keep this document up to date ? --> 
-- **Change authority:** `<Team Leader / N-Pulse>` <!-- What is the role/responsibility of the person -->
+- **Document owner:** `Ana Benavente / Haptics` <!-- Who is responsible to keep this document up to date ? --> 
+- **Change authority:** `Team Leader / N-Pulse` <!-- What is the role/responsibility of the person -->
 
 
 ### 1.3 Abbreviated terms and definitions
 
 | Term | Definition |
 |---|---|
-| `BLE` | `<Bluetooth Low Energy>` |
-| `GND` | `<Ground>` |
-| `LED` | `<Light-Emitting Diode>` |
-| `MCU` | `<Microcontroller Unit>` |
-| `NTC` | `<Negative Temperature Coefficient>` |
-| `PCB` | `<Printed Circuit Board>` |
-| `PWM` | `<Pulse Width Modulation>` |
+| `BLE` | `Bluetooth Low Energy` |
+| `GND` | `Ground` |
+| `LED` | `Light-Emitting Diode` |
+| `MCU` | `Microcontroller Unit` |
+| `NTC` | `Negative Temperature Coefficient` |
+| `PCB` | `Printed Circuit Board` |
+| `PWM` | `Pulse Width Modulation` |
 
 ## 2. Requirements and traceability
 
@@ -155,7 +155,7 @@ the requirements this design directly addresses. -->
 
 ### 3.1 Solution overview
 
-`<The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration of different intensities, so the user can feel contact without looking at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.>`
+`The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration of different intensities, so the user can feel contact without looking at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.`
 
 
 <!-- Mermaid renders natively on GitHub. Alternatively link an image from
@@ -192,7 +192,7 @@ flowchart LR
 
 ```
 
-*Figure 3.1: High-level architecture of `<Haptics>`.*
+*Figure 3.1: High-level architecture of `Haptics`.*
 
 
 ### 3.2 Main design choices
@@ -202,38 +202,38 @@ Decision · Rationale · Requirements addressed · Consequences. -->
 
 #### 3.2.1 `<Battery and power system>`
 
-- **Decision:** `<Power the bracelet using a 7.4 V 3400 mAh 2S Li-ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the thermistor.>`
-- **Rationale:** `<Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail, with a usage of minimum 4 hours.>`
-- **Requirements addressed:** `HA-001, HA-011, SYS-034, SYS-019, SYS-020, SYS-018, SYS-010, SAF-008`
-- **Consequences / limitations:** `<Need of 2S protection board and charger, and visible warning of temperature as well as thermometer calibration.>`
+- **Decision:** `Power the bracelet using a 7.4 V 3400 mAh 2S Li-ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the thermistor.`
+- **Rationale:** `Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail, with a usage of minimum 4 hours.`
+- **Requirements addressed:** `HA-001, HA-011, SYS-034, SYS-019, SYS-020, SYS-018, SYS-010, SAF-008.`
+- **Consequences / limitations:** `Need of 2S protection board and charger, and visible warning of temperature as well as thermometer calibration.`
 
 #### 3.2.2 `<Wireless communication>`
 
-- **Decision:** `<Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.>`
-- **Rationale:** `<BLE is built onto the chip and is low power, removing any wires between the prosthesis and bracelet, allowing the user to manipulate the bracelet separately.>`
-- **Requirements addressed:** `HA-009, SYS-029, SYS-016, SYS-017`
-- **Consequences / limitations:** `<Latency and range depend on BLE.>`
+- **Decision:** `Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.>`
+- **Rationale:** `BLE is built onto the chip and is low power, removing any wires between the prosthesis and bracelet, allowing the user to manipulate the bracelet separately.`
+- **Requirements addressed:** `HA-009, SYS-029, SYS-016, SYS-017.`
+- **Consequences / limitations:** `Latency and range depend on BLE.`
 
 #### 3.2.3 `<Pressure sensors and circuit>`
 
-- **Decision:** `<Use resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.>`
-- **Rationale:** `<Thin, low-cost, responsive to light contact, and low-power.>`
-- **Requirements addressed:** `HA-004, HA-005, HA-006, HA-007, HA-008, HA-009, HA-010, SYS-028, SYS-021, SYS-011`
-- **Consequences / limitations:** `<Need of calibration, has a non-linear response, and a sensitivity trade-off for ranges.>`
+- **Decision:** `Use resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.`
+- **Rationale:** `Thin, low-cost, responsive to light contact, and low-power.`
+- **Requirements addressed:** `HA-004, HA-005, HA-006, HA-007, HA-008, HA-009, HA-010, SYS-028, SYS-021, SYS-011.`
+- **Consequences / limitations:** `Need of calibration, has a non-linear response, and a sensitivity trade-off for ranges.`
 
 #### 3.2.4 `<Vibration feedback>`
 
 - **Decision:** `Render the pressure measured at the prosthesis as vibration on the skin, with the intensity increasing with the pressure.`
-- **Rationale:** `<Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light.>`
-- **Requirements addressed:** `HA-002, HA-003, HA-004, HA-005, HA-006, HA-007, HA-008, SYS-031, SYS-028, SYS-021, SYS-011`
-- **Consequences / limitations:** `<Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.>`
+- **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light.`
+- **Requirements addressed:** `HA-002, HA-003, HA-004, HA-005, HA-006, HA-007, HA-008, SYS-031, SYS-028, SYS-021, SYS-011.`
+- **Consequences / limitations:** `Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.`
 
 #### 3.2.5 `<Servomotor feedback>`
 
 - **Decision:** `Render the prosthesis's wrist position (flexion/extension), given by the wrist motor position, as a movement of a servomotor mechanism on the bracelet.`
-- **Rationale:** `<Motion following the natural direction and position of the wrist intuitively.>`
-- **Requirements addressed:** `HA-002, HA-003, SYS-031`
-- **Consequences / limitations:** `<Adds to power draw, size and mechanical & electrical complexity, must be comfortable and safe, and range must be matched to wrist movement also limited by latency.>`
+- **Rationale:** `Motion following the natural direction and position of the wrist intuitively.`
+- **Requirements addressed:** `HA-002, HA-003, SYS-031.`
+- **Consequences / limitations:** `Adds to power draw, size and mechanical & electrical complexity, must be comfortable and safe, and range must be matched to wrist movement also limited by latency.`
 
 
 #### 3.2.6 Operating modes
@@ -244,16 +244,10 @@ stages. Include entry and exit conditions and what is active in each. -->
 | Mode / Stage | Purpose | Entry condition | Exit condition | Active components |
 |---|---|---|---|---|
 | Idle | Wait for the prosthesis to connect with minimal power use and no output to the user.|Power switch turned on and boot finished, or BLE link lost while no fault is present.  | BLE connection established with the prosthesis (goes to Nominal) or a fault is detected (goes to Safe / fault).| MCU with BLE advertising, power management (buck converters), BLE status LED. Vibration motors, servomotor and drivers are off.|
-
-
 | Nominal operation |Convert incoming pressure and wrist position data into vibration and servomotor feedback. |BLE connected and valid data being received.|BLE link lost or no data (goes to Idle), fault detected (goes to Safe / fault), or power switch off. | MCU and BLE, vibration motors with their drivers (PWM), servomotor, battery and power rails, NTC temperature monitoring. |
 | 
-
-
 Calibration | Set the pressure thresholds for the vibration levels, and the servomotor range for the wrist’s flexion and extension.| | | |
 | 
-
-
 Safe / fault state | Protect the user and the hardware by stopping the outputs when battery's temperature rises or the switch is turned off.|Battery temperature above 40 °C or turned off manually | Condition cleared (goes to Idle), or a latched fault requires the user to switch off and on. | MCU, temperature monitoring (NTC), over-temperature LED. Vibration motors and servomotor are disabled. BLE can stay on to report the fault.|
 
 ### 3.3 Functionally linked systems
