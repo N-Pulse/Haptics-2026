@@ -250,9 +250,14 @@ stages. Include entry and exit conditions and what is active in each. -->
 
 ### 3.3 Functionally linked systems
 
-State here which other (sub-)systems are necessary or planned to be
-used with the sytem you're currently designing
+#### 3.3.1 `Electronics circuits`
+add schematics, pcb boards
 
+#### 3.3.2 `Firmware`
+add code diagram
+
+#### 3.3.3 `Mechanics`
+add CAD designs 
 
 ### 3.4 Performance budgets and design margins
 
