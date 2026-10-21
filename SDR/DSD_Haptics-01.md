@@ -151,7 +151,7 @@ the requirements this design directly addresses. -->
 
 ### 3.1 Solution overview
 
-`<Shortly, how does the retained concept address the problem ? State the core idea in one paragraph.>`
+`<The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration of different intensities, so the user can feel contact without looking at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.>`
 
 
 <!-- Mermaid renders natively on GitHub. Alternatively link an image from
@@ -165,6 +165,45 @@ flowchart LR
     C --> D[Output: result / product]
     E[Control software] --> B
     E --> C
+```
+
+```mermaid
+flowchart LR
+    subgraph PROS["Prosthesis"]
+        S["3 pressure sensors"]
+        W["Wrist motor position (extension / flexion)"]
+    end
+
+    subgraph BRC["Haptic bracelet (subsystem)"]
+        MCU["ESP32-C3 microcontroller with BLE"]
+        DRV["Vibration motor drivers: MOSFET and flyback diode"]
+        MOT["Vibration motors"]
+        SRV["Servomotor mechanism"]
+        PWR["Battery 7.4 V, switch and buck converters 3.3 V and 5 V"]
+        NTC["NTC thermistor on battery pack"]
+        LED["Status LEDs: BLE and over-temperature"]
+    end
+
+    USER["User: skin and tactile perception"]
+
+    S -->|"Data: pressure readings over BLE"| MCU
+    W -->|"Data: wrist position over BLE"| MCU
+    MCU -->|"Electrical: PWM, low / medium / high"| DRV
+    DRV -->|"Electrical: switched motor current"| MOT
+    MOT -->|"Mechanical: vibration on skin"| USER
+    MCU -->|"Electrical: servo control signal"| SRV
+    SRV -->|"Mechanical: movement on skin"| USER
+    USER -.->|"Biological: tactile sensation"| MOT
+
+    NTC -->|"Electrical: analog temperature signal"| MCU
+    MCU -->|"Electrical: LED drive"| LED
+    LED -->|"User interaction: status light"| USER
+    USER -->|"User interaction: on / off switch"| PWR
+
+    PWR -.->|"Electrical: 3.3 V supply"| MCU
+    PWR -.->|"Electrical: 3.3 V supply"| DRV
+    PWR -.->|"Electrical: 3.3 V supply"| MOT
+    PWR -.->|"Electrical: 5 V supply"| SRV
 ```
 
 *Figure 3.1: High-level architecture of `<subsystem>`.*
