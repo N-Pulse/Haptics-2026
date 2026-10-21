@@ -93,16 +93,6 @@ proposed (issue, RFC, pull request)? -->
 | `MCU` | `<Microcontroller Unit>` |
 | `PCB` | `<Printed Circuit Board>` |
 
-
-
-> <span style='color: red;'>EXAMPLE</span>
->
->| Term | Definition |
->|---|---|
->| DSD | Design Solution Definition |
->| ICD | Interface Control Document | 
->
-
 ## 2. Requirements and traceability
 
 <!-- Do not duplicate the full requirements document. Link to it and list only
@@ -110,12 +100,42 @@ the requirements this design directly addresses. -->
 
 | Requirement ID | Verification method | Status |
 |---|---|---|
-|   |   |   |
+| HA-001  | D  | In-progress  |
+| HA-002  | I  | In-progress |
+| HA-003  | T  | To do  |
+| HA-004  | D  | In-progress   |
+| HA-005  | T  |  In-progress  |
+| HA-006  | T  | In-progress |
+| HA-007  | D  | In-progress   |
+| HA-008  | T  | To-do  |
+| HA-009  | I  | In-progress   |
+| HA-010  | T  | In-progress   |
+| HA-011  | T  | To do  |
+| HA-012  | T | In-progress |
+| HA-013  | T | In-progress |
+| SYS-041  | D  | To do |
+| SYS-040  | D  | To do  |
+| SYS-039  | D  | To do  |
+| SYS-034 | D  | In-progress  |
+| SYS-035  |  M | To do  |
+| SYS-031  | T  | To do  |
+| SYS-029  | T  | In-progress  |
+| SYS-030 | D |  In-progress |
+| SYS-028  | T  | In-progress  |
+| SYS-027  | T  | To do  |
+| SYS-021  | D  | To do  |
+| SYS-022 | I  | To do  |
+| SYS-019  |  T | In-progress  |
+| SYS-020  | T  | In-progress  |
+| SYS-018  | T  | To do |
+| SYS-016 | T  | To do  |
+| SYS-011  | D  | In-progress  |
+| SYS-010  | T  | To do  |
+| SYS-017  | T  | To do  |
+| SAF-005 | I  | In-progress  |
+| SAF-008  | T  | In-progress  |
+| SAF-009 | T  | To do  |
 
-> <span style='color: red;'>EXAMPLE</span>
-> | Requirement ID | Verification method | Status |
-> |---|---|---|
->| REQ-001 | A | met |
 
 > **Verification methods:** (D)emonstration, (T)est, (M)easurement, (I)nspection, (A)nalysis
  
