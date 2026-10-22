@@ -209,7 +209,7 @@ Decision · Rationale · Requirements addressed · Consequences. -->
 
 #### 3.2.2 `Wireless communication`
 
-- **Decision:** `Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.>`
+- **Decision:** `Use an ESP32-C3 Super Mini as the bracelet's MCU, receiving pressure and wrist-position data from the prosthesis via BLE.`
 - **Rationale:** `BLE is built onto the chip and is low power, removing any wires between the prosthesis and bracelet, allowing the user to manipulate the bracelet separately.`
 - **Requirements addressed:** `HA-009, SYS-029, SYS-016, SYS-017.`
 - **Consequences / limitations:** `Latency and range depend on BLE.`
