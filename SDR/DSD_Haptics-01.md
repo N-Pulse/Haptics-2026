@@ -261,7 +261,7 @@ add CAD designs
 
 ### 3.4 Performance budgets and design margins
 
-Mass/Power/Compute/Delay budgets. Either include them here directly or link the relevant excel sheet
+Mass/Power/Compute/Delay budgets: https://docs.google.com/spreadsheets/d/1crh8A0cA0GD1TBoOaqpi6O97k_zhQEbA1Yp0f57wpJg/edit?usp=sharing
 
 ---
 
