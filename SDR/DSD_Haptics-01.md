@@ -251,13 +251,13 @@ stages. Include entry and exit conditions and what is active in each. -->
 ### 3.3 Functionally linked systems
 
 #### 3.3.1 `Electronics circuits`
-add schematics, pcb boards
+add schematics, pcb boards, how we designed the power regulators, why we chose those components.
 
 #### 3.3.2 `Firmware`
-add code diagram
+add code diagram, why we are using thresholds, bluetooth receiving, explain code generally.
 
 #### 3.3.3 `Mechanics`
-add CAD designs 
+add CAD designs, explain modular system, where cables would go, how the battery/board are going to be placed.
 
 ### 3.4 Performance budgets and design margins
 
