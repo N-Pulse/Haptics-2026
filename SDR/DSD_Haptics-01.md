@@ -216,15 +216,15 @@ Decision · Rationale · Requirements addressed · Consequences. -->
 
 #### 3.2.3 `Pressure sensors and circuit`
 
-- **Decision:** `Use resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.`
+- **Decision:** `Use 5 (one per fingertip) resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.`
 - **Rationale:** `Thin, low-cost, responsive to light contact, and low-power.`
 - **Requirements addressed:** `HA-004, HA-005, HA-006, HA-007, HA-008, HA-009, HA-010, SYS-028, SYS-021, SYS-011.`
 - **Consequences / limitations:** `Need of calibration, has a non-linear response, and a sensitivity trade-off for ranges.`
 
 #### 3.2.4 `Vibration feedback`
 
-- **Decision:** `Render the pressure measured at the prosthesis as vibration on the skin, with the intensity increasing with the pressure.`
-- **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light.`
+- **Decision:** `Render the pressure measured at the prosthesis as vibration on the skin in 3 of the sensors, into 3 vibration motors with the intensity increasing with the pressure.`
+- **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light. By only having 3 out of the 5 signals as outputs, the user gets enough information of the pressure without handling too much information.`
 - **Requirements addressed:** `HA-002, HA-003, HA-004, HA-005, HA-006, HA-007, HA-008, SYS-031, SYS-028, SYS-021, SYS-011.`
 - **Consequences / limitations:** `Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.`
 
