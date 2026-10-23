@@ -397,7 +397,7 @@ Score scale :
 | Battery capacity/performance | 5 | 5 |
 | Size | 4 | 5 |
 | Cost | 3 | 4 |
-| ---|---|---|
+|---|---|---|
 |Total Score| 67 | max score : 85 | 
 
 #### `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` 
@@ -420,7 +420,7 @@ Score scale :
 | Battery capacity/performance | 5 | 5 |
 | Size | 4 | 3 |
 | Cost | 3 | 4 |
-| ---|---|---|
+|---|---|---|
 |Total Score| 74 | max score : 85 | 
 
 ### 4.1.2 Trade-off summary
@@ -475,7 +475,7 @@ Score scale :
 | Reliability | 5 | 3 |
 | Size | 4 | 4 |
 | Cost | 3 | 4 |
-| ---|---|---|
+|---|---|---|
 |Total Score| 63 | max score : 85 | 
 
 #### `FSR 400 force-sensitive resistor`
@@ -501,7 +501,7 @@ Score scale :
 | Reliability | 5 | 3 |
 | Size | 4 | 5 |
 | Cost | 3 | 4 |
-| ---|---|---|
+|---|---|---|
 |Total Score| 67 | max score : 85 | 
 
 ### 4.1.2 Trade-off summary
