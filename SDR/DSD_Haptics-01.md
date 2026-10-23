@@ -254,7 +254,26 @@ stages. Include entry and exit conditions and what is active in each. -->
 add schematics, pcb boards, how we designed the power regulators, why we chose those components.
 
 #### 3.3.2 `Firmware`
-add code diagram, why we are using thresholds, bluetooth receiving, explain code generally.
+
+<img width="639" height="1072" alt="Code-Diagram" src="https://github.com/user-attachments/assets/a3da4e7e-9a7a-4fe6-b8fb-c469122cd4e7" />
+
+General code explanation: 
+The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs so that each responsibility stays in its own file rather than one large script.
+
+On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the four sensors (three pressure sensors and one flex sensor) through analogRead().These four values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy.
+
+On the arm side, the receiver sketch (BLE_receiver.ino) acts as the BLE client: it connects to the sender, listens for incoming data, and unpacks it back into usable values. Each value is applied updateFilter() to smooth out noisy raw readings. Then each filtered value passes through pressureThreshold() or flexionThreshold() to clamp it into a known, safe range.Each pressure value is sent to its corresponding vibration motor, and the flexion value is converted into an angle for the servo, using the mapping functions in mapping.ino. Separately from this Bluetooth data flow, the receiver also reads a thermistor connected directly to its own board, calculates the current temperature, and lights an LED if that temperature crosses a safety threshold. Another LDE lights up when the receiver and the sender are connected via bluetooth and turns off when the two boards lose their link. 
+
+Why use thresholds: 
+* Noise filtering: raw ADC readings from resistive sensors fluctuate slightly even at rest, due to electrical noise. A noise floor cutoff (below which a reading is forced to 0) prevents the system from registering “phantom” pressure when nothing is actually being pressed.
+* For safety: sensors can momentarily spike beyond their meaningful operating range. Clamping to a max pressure (and a min/max flexion) guarantees the value sent is always within a known, fixed range, which is required for the mapping step (map()) on the receiver to scale it correctly into motor output. Without this guarantee, an out-of-range spike could translate into an invalid or excessive command to the motors/servo.
+
+
+Bluetooth (BLE), how receiving works:
+* The two boards use a client-server BLE architecture: the hand-side (testes on a ESP32-S3 for now)  is the server (it creates a service/characteristic and advertises itself), and the arm-side ESP32-C3 is the client (it actively connects to the server’s known address).
+* The client (arm side) doesn’t wait to be told when new data arrives. Instead, it repeatedly checks the server’s characteristic on its own, by calling notify() to signal if new data is available. This is done roughly every 10 milliseconds and it reads whatever value is currently there
+* Data is sent through BLE as raw bytes, not as typed values (BLE has no concept of “int”). The sender packs its array of 4 integers into bytes via a direct memory reinterpretation ((uint8_t*)packet), and the receiver reverses this with memcpy() to reconstruct the same 4 integers on its side.
+* A size check (value.length() == sizeof(int) * 4) guards against malformed or unexpected packets before processing.
 
 #### 3.3.3 `Mechanics`
 add CAD designs, explain modular system, where cables would go, how the battery/board are going to be placed.
