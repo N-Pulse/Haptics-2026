@@ -254,7 +254,39 @@ stages. Include entry and exit conditions and what is active in each. -->
 add schematics, pcb boards, how we designed the power regulators, why we chose those components.
 
 #### 3.3.2 `Firmware`
+# System Flowchart
 
+```mermaid
+flowchart TD
+    A["Sensors<br/>3 pressure sensors<br/>1 flexion sensor"]
+    B["Hand / Sender<br/>ADC read<br/>analogRead()"]
+    C["BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"]
+    D["ESP32-C3<br/>(Arm / Receiver)"]
+    E["Filter each signal<br/>updateFilter()"]
+    F["Threshold<br/>pressureThreshold()<br/>flexionThreshold()"]
+    G["MAP → Scaling to range<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
+    H["3 Vibration Motors<br/>1 per finger<br/>setVibrationMotors()"]
+    I["Servos<br/>Flexion & Extension<br/>setServoAngle()"]
+    J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    G --> I
+    G --> J
+
+    classDef sensors fill:#e8f2ff,stroke:#3973ac,color:#111;
+    classDef processing fill:#eaf7ea,stroke:#4c956c,color:#111;
+    classDef output fill:#fff0dc,stroke:#c58b39,color:#111;
+
+    class A,B,C,D sensors;
+    class E,F,G processing;
+    class H,I,J output;
+```
 <img width="639" height="1072" alt="Code-Diagram" src="https://github.com/user-attachments/assets/a3da4e7e-9a7a-4fe6-b8fb-c469122cd4e7" />
 
 General code explanation: 
