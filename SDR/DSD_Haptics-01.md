@@ -269,7 +269,7 @@ flowchart LR
     J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
 
     A --> B
-    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
+    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"|--> D
     D --> E
     E --> F
     F --> G
