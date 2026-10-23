@@ -361,8 +361,6 @@ The trade-off method used was based on the following criteria :
 - `Size`
 - `Cost`
 
-<span style='color: red;'> The table given below is an example. Adapt it with the above mentionned criterias</span>
-
 | Criterion | Weight (1 - 5) | Rationale for weight |
 |---|---|---|
 | Patient safety | 5 | Patient safety is the highest priority, as accidental drops or mechanical impacts could damage the battery, potentially causing an internal short circuit, thermal runaway, fire, or explosion, and consequently injuring the patient. The battery should therefore have a robust protective casing and appropriate protection against physical damage, overcharging, over-discharging, and short circuits. An NTC thermistor should monitor battery temperature to enable protective measures if unsafe temperatures are detected. |
@@ -383,15 +381,15 @@ Score scale :
 
 - **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
-  *High energy density, allowing a compact and lightweight design.
-  *Flexible form factors that can facilitate integration into a wearable device.
-  *High discharge capability, depending on the selected battery specification.
-  *Potential for improved user comfort due to reduced weight and compact dimensions.
+  * High energy density, allowing a compact and lightweight design.
+  * Flexible form factors that can facilitate integration into a wearable device.
+  * High discharge capability, depending on the selected battery specification.
+  * Potential for improved user comfort due to reduced weight and compact dimensions.
 - **Cons**:
-  *Vulnerable to physical damage, punctures, and deformation, which may cause internal short circuits or thermal runaway.
-  *Requires suitable charging, over-discharge, overcurrent, and temperature protection.
-  *A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
-  *The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
+  * Vulnerable to physical damage, punctures, and deformation, which may cause internal short circuits or thermal runaway.
+  * Requires suitable charging, over-discharge, overcurrent, and temperature protection.
+  * A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
+  * The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
   
 #### 4.2.2 `<Li-Po battery>` score
 
@@ -408,15 +406,15 @@ Score scale :
 
 - **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
-  *Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
-  *Nominal voltage compatible with a system designed for a 2-cell lithium-ion pack, subject to voltage regulation.
-  *Standard cylindrical cells can be integrated into a rigid protective enclosure.
-  *Potentially good availability and cost-effectiveness, depending on the supplier and pack configuration.
+  * Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
+  * Nominal voltage compatible with a system designed for a 2-cell lithium-ion pack, subject to voltage regulation.
+  * Standard cylindrical cells can be integrated into a rigid protective enclosure.
+  * Potentially good availability and cost-effectiveness, depending on the supplier and pack configuration.
 - **Cons**:
-  *Larger and potentially heavier than a comparable Li-Po battery, which may reduce wearable comfort.
-  *Requires a suitable 2S BMS, cell balancing, and a charger compatible with the pack's full-charge voltage.
-  *The enclosure must protect the cells from impacts, crushing, and other mechanical damage
-  *The additional weight and volume may constrain the mechanical design and placement of the battery.
+  * Larger and potentially heavier than a comparable Li-Po battery, which may reduce wearable comfort.
+  * Requires a suitable 2S BMS, cell balancing, and a charger compatible with the pack's full-charge voltage.
+  * The enclosure must protect the cells from impacts, crushing, and other mechanical damage
+  * The additional weight and volume may constrain the mechanical design and placement of the battery.
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
