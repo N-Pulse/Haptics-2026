@@ -346,10 +346,89 @@ The motors are connected to the driver through the `M_out1` and `M_out2` termina
 Describe the status LED interface and its role in providing visual feedback on the system state. Explain the function of the associated components, including any current-limiting resistors, and justify their selection based on the LED specifications and required operating current.
 
 #### 3.3.2 `Firmware`
-add code diagram, why we are using thresholds, bluetooth receiving, explain code generally.
+##### System Flowchart
+
+```mermaid
+flowchart LR
+    A["Sensors:<br/><br/>3 pressure sensors<br/>1 flexion sensor"]
+    B["Hand / Sender<br/>ADC read:<br/>analogRead()"]
+    D["Arm / Receiver<br/>ESP32-C3 Super Mini"]
+    E["Filter each signal:<br/>updateFilter()"]
+    F["Threshold:<br/>pressureThreshold()<br/>flexionThreshold()"]
+    G["MAP-Scaling to range:<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
+    H["3 Vibration Motors <br/> (1 per finger):<br/>setVibrationMotors()"]
+    I["Servomotor<br/>Flexion & Extension:<br/>setServoAngle()"]
+    J["Thermistor:<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
+
+    A --> B
+    B -->|"BLE<br/>Send arrays as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
+    D --> E
+    E --> F
+    F --> G
+    G --> H
+    G --> I
+    G --> J
+
+```
+##### General code architecture
+The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs.
+
+On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the three sensors (pressure sensors) through analogRead(). These three values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy in pack every 5-10 ms (TBD).
+
+On the arm side, the receiver sketch (BLE_receiver.ino) acts as the BLE client: it connects to the sender, awaits for incoming data, and unpacks it back into values. Each value is applied updateFilter() to smooth out raw readings. Then each filtered value passes through pressureThreshold() or flexionThreshold() to clamp it into a known, safe range. Each pressure value is sent to its corresponding vibration motor, and the flexion value is converted into an angle for the servomotor, using the mapping functions in (mapping.ino). Separately from this Bluetooth data flow, the receiver also reads a thermistor connected directly to the board, calculates the actual temperature, and lights an LED if that temperature crosses an established safety threshold. Another LED lights up when the receiver and the sender are connected via BLE and turns off when the two boards lose their link. 
+
+##### Thresholding and Amplitude Mapping
+
+The filtered ADC readings are processed using thresholds to improve signal stability, ensure safe operating limits, and make changes in sensation more perceptible. First, a noise-floor threshold suppresses small fluctuations caused by electrical noise in the resistive pressure sensors. Readings below this threshold are set to zero, preventing unintended or “phantom” vibrations when no meaningful pressure is applied. The signals are then clamped to predefined minimum and maximum values to prevent out-of-range measurements from producing invalid motor or servo commands.
+
+Next, the valid pressure readings are divided into multiple threshold intervals. Each interval corresponds to a different vibration amplitude, allowing the haptic feedback to produce distinct intensity levels rather than small, potentially imperceptible changes in motor output. 
+
+Finally, the resulting values are mapped to the permitted output range of the vibration motors and servomotor mechanism. For vibration motors, the mapped value controls the PWM duty cycle, while for the servomotor, it determines the target angle within its allowed operating range. This approach improves signal robustness, output safety, and the perceptibility of changes in haptic feedback.
+
+##### BLE Communication
+
+The two boards communicate using a client–server BLE architecture. The hand-side board, currently tested on an ESP32-S3, acts as the server by creating a BLE service and characteristic and advertising its availability, while the arm-side ESP32-C3 acts as the client and actively connects to the server using its known address. Approximately every 10 milliseconds, the client reads the characteristic to retrieve the latest sensor data. The communication uses raw bytes rather than explicitly typed values: the sender converts an array of three integers into a byte sequence using a pointer cast (`(uint8_t*)packet`), and the receiver uses `memcpy()` to reconstruct the original four integers. Before processing the received data, the client verifies that the payload length matches the expected size (`value.length() == sizeof(int) * 4`), preventing malformed or incomplete packets from being interpreted as valid sensor readings.
 
 #### 3.3.3 `Mechanics`
-add CAD designs, explain modular system, where cables would go, how the battery/board are going to be placed.
+General structure of the bracelet : 
+The bracelet consists of three parts: the component for finger-pressure feedback, the component for wrist-flexion feedback, and the battery/circuit board section. Finally these parts are all connected by a Velcro strip to fit the arm. 
+
+##### The pressure feedback : 
+Structure : 
+The pressure feedback component consists of three identical modules for providing feedback to the thumb, index finger, and middle finger. Each of these modules measures 32 mm in height, 26 mm in width, and 5 mm in thickness, and consists of three parts:
+* The main body : It includes a hole on each side for the straps to pass through and has a cavity in the center to house the vibrator.
+* The vibrator : It goes in the cavity in the main body of the module.
+* The cap : It enclose the vibrator within the module and allows the cables to pass through via a small hole on the back.
+[Pressure feedback assembly](https://drive.google.com/file/d/1q7tmiTraR-jlEE6LJhXr1u1NyFAoutsr/view?usp=drive_link)
+[Pressure feedback CADs](https://drive.google.com/drive/folders/1Q9jedtYQnt1176AdBbXqwLDbgV0Av4K-?usp=drive_link)
+
+
+##### The flexion feedback : 
+Structure :
+The flexion feedback module is 60mm high, 60mm wide and 21mm thick and consists of five parts :
+* The main body : It includes a hole on each side for the straps to pass through, has un hole for the rail and a place for the servo.
+* The rail : It consists of two parts: the top, which features teeth, and the bottom, which has a 5mm bump. These two parts are held together by two guides on the top piece and a pin at each end of the rail.
+* The servo : It goes in the place in the main body of the module and is coonected to the gear.
+* The gear : It forms the connection between the servo and the rail.
+* The cap : It enclose the servo and allows the cables to pass through via a small hole on the side.
+[Flexion feedback assembly](https://drive.google.com/file/d/1da2Mox3atejDgfT-ykYJN5pDtji0LcrP/view?usp=drive_link)
+[Flexion feedback Cads](https://drive.google.com/drive/folders/18fYBH1grhHKaJqEiLSD7rRKpASQkbYJC?usp=drive_link)
+
+How it works :
+When the servo activates, it drives the gear, which in turn moves the rail in a linear motion that the user can feel due to the bump.
+
+
+##### The battery/board pack : (It will need to be adjusted once we have received the battery and the board)
+Structure :
+The battery/board module measures 77.7 mm in height, 59 mm in width, and 36 mm in thickness, and consists of six components that fit into one another and are secured by pins:
+* The main body : It includes a hole on each side for the straps to pass through and a place to put the first stage and the battery.
+* The first stage : It is the main part that hold the battery. It is separate from the main body because printing both together would be too complicated due to floating regions.
+* The battery : She's in the first stage and is held in place by the second stage.
+* The second stage : It the part that holds the board and closes the battery section. It is separated from the main body for the same reasons as in the first stage.
+* The board : She's in the second stage and is screwed to it.
+* The cap : It encloses the board and features 2 holes for passing through two LEDs.
+[Battery/board assembly](https://drive.google.com/file/d/13KTVKjT1o8PBZH2u7Te5b1pqeQ4y3S1g/view?usp=drive_link)
+[Battery/board CADs](https://drive.google.com/drive/folders/1uHSiRIowJNreikrxuMxqF4VdFK1-pneW?usp=drive_link)
 
 ### 3.4 Performance budgets and design margins
 
@@ -366,29 +445,20 @@ decisions and records why alternatives were rejected. -->
 
 `<The goal of this section is to go over every other solution you found relevant but that you chose not to pursue.>`
 
-### 4.1 Trade-off method
+### 4.1 Battery selection
 
 The trade-off method used was based on the following criteria : 
-- `<criteria nmbr 1>`
-- `<criteria nmbr 2>`
-- ...
-
-
-`<Describe criteria, weights, and scoring scale. This is a standardized way to explicit your priorities in the design.>`
-
-<span style='color: red;'> The table given below is an example. Adapt it with the above mentionned criterias</span>
-
-`<example for an ADC chip for a proof of concept board>`
-
+- `Patient safety`
+- `Battery capacity/performance`
+- `Size`
+- `Cost`
 
 | Criterion | Weight (1 - 5) | Rationale for weight |
 |---|---|---|
-| Meets performance requirements | 5 | This ADC was chosen to be part of a first proof of concept. As such, performance is the priority. |
-| Safety and biosafety | 3 | ADC is not in direct contact with the patient. While a medical approved chip is favourable, it is not mandatory |
-| Cost | 3 | This is a proof of concept. The ADC is ordered in small batch and as such prices are higher. Additionally, budget is a constraint for this board  |
-| Reproducibility and accessibility | 4 | Proof of concept. By definition needs to work reliabily and predictably |
-| Supply chain robustness  | 2 | This ADC has high performance requirements that cannot be fulfilled with common chips. |
-| Maintainability and community support | 1 | This is not expected to be replaced, changed or maintained. |
+| Patient safety | 5 | Patient safety is the highest priority, as accidental drops or mechanical impacts could damage the battery, potentially causing an internal short circuit, thermal runaway, fire, or explosion, and consequently injuring the patient. The battery should therefore have a robust protective casing and appropriate protection against physical damage, overcharging, over-discharging, and short circuits. An NTC thermistor should monitor battery temperature to enable protective measures if unsafe temperatures are detected. |
+| Battery capacity/performance | 5 | The battery shall meet the system's power requirements, provide a 7.4 V output, and have a minimum capacity of 3000 mAh to ensure sufficient operating time (4 hours). |
+| Size | 4 | The battery should be compact and lightweight enough to integrate into the wearable system without significantly compromising user comfort, mobility, or ergonomics. |
+| Cost | 3 | The battery should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
 
 Score scale : 
 > [1] : Does not meet any requirements
@@ -397,51 +467,311 @@ Score scale :
 > [4] : Meets all minimum requirements and 'should'
 > [5] : Meets all requirements, 'Shall, should & may'
 
-### 4.2 Traded-off design choices
+### 4.1.1 Traded-off design choices
 
-#### 4.2.1 `<Alternative design choice A>`
+#### `Li-Po battery`
 
-- **Description:**
+- **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
+  * High energy density, allowing a compact and lightweight design.
+  * Flexible form factors that can facilitate integration into a wearable device.
+  * High discharge capability, depending on the selected battery specification.
+  * Potential for improved user comfort due to reduced weight and compact dimensions.
 - **Cons**:
-
-#### 4.2.2 `<Alternative design choice A>` score
-
- 
+  * Vulnerable to physical damage, punctures, and deformation, which may cause internal short circuits or thermal runaway.
+  * Requires suitable charging, over-discharge, overcurrent, and temperature protection.
+  * A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
+  * The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
-| Meets performance requirements | 5 | 3 |
-| Safety and biosafety | 3 | 5 |
-| Cost | 3 | 1 |
-| Reproducibility and accessibility | 4 | 4 |
-| Supply chain robustness* | 2 | 2 |
-| Maintainability and community support | 1 | 1 |
-| ---|---|---|
-|Total Score| 54 | max score : 90 | 
+| Patient safety | 5 | 2 |
+| Battery capacity/performance | 5 | 5 |
+| Size | 4 | 5 |
+| Cost | 3 | 4 |
+|---|---|---|
+|Total Score| 67 | max score : 85 | 
 
-#### 4.2 `<Retained design choice>` score
+#### `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` 
 
+- **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
+  * Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
+  * Nominal voltage compatible with a system designed for a 2-cell lithium-ion pack, subject to voltage regulation.
+  * Standard cylindrical cells can be integrated into a rigid protective enclosure.
+  * Potentially good availability and cost-effectiveness, depending on the supplier and pack configuration.
 - **Cons**:
+  * Larger and potentially heavier than a comparable Li-Po battery, which may reduce wearable comfort.
+  * Requires a suitable 2S BMS, cell balancing, and a charger compatible with the pack's full-charge voltage.
+  * The enclosure must protect the cells from impacts, crushing, and other mechanical damage
+  * The additional weight and volume may constrain the mechanical design and placement of the battery.
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
-| Meets performance requirements | 5 | 4 |
-| Safety and biosafety | 3 | 3 |
-| Cost | 3 | 3 |
-| Reproducibility and accessibility | 4 | 4 |
-| Supply chain robustness* | 2 | 3 |
-| Maintainability and community support | 1 | 2 |
-| ---|---|---|
-|Total Score| 62 | max score : 90 | 
+| Patient safety | 5 | 5 |
+| Battery capacity/performance | 5 | 5 |
+| Size | 4 | 3 |
+| Cost | 3 | 4 |
+|---|---|---|
+|Total Score| 74 | max score : 85 | 
 
-### 4.3 Trade-off summary
+### 4.1.2 Trade-off summary
 
 | Option | Score | Retained | Key reason |
 |---|---|---|---|
-| Retained concept | 62 | Yes | Better performance, lower price |
-| Alternative A | 54 | No | Too expensive, lower performance|
+| Li-Po Battery | 67 | No | Compact and lightweight, but impact protection and safety requirements need further verification. |
+| 2S1P 7.4V battery pack NCR18650B li-ion 3400mAh | 74 | Yes | Higher total weighted score, sufficient nominal capacity, and an assumed acceptable cost, despite the larger size.|
+
+### 4.2 Pressure sensor selection
+
+The trade-off method used was based on the following criteria : 
+- `Sensitivity`
+- `Reliability`
+- `Size`
+- `Cost`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| Sensitivity | 5 | Sensitivity is essential for detecting variations in applied pressure and translating them into distinguishable vibration intensities. The sensor shall detect meaningful changes in force across the intended operating range. |
+| Reliability | 5 | The sensor shall provide sufficiently consistent readings during repeated use to ensure dependable haptic feedback. Signal drift, hysteresis, mechanical wear, and measurement variability should be considered. |
+| Size | 4 | The sensor should be compact and lightweight enough to integrate into the prosthesis, particularly near the contact points, without compromising mechanical integration or comfort. |
+| Cost | 3 | The sensor should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.2.1 Traded-off design choices
+
+#### `FSR 402 force-sensitive resistor`
+
+- **Description**: The FSR 402 is another force-sensitive resistive sensor that can detect applied pressure and provide an analog signal to the microcontroller. It offers a larger sensing area than the FSR 400, making it a potential alternative where the mechanical contact area is larger or pressure distribution is less localized.
+- **Pros**:
+  * Larger active sensing area may facilitate integration with wider contact surfaces.
+  * Simple analog interfacing with a microcontroller.
+  * Suitable for detecting relative changes in applied force.
+  * Similar operating principle to the FSR 400, allowing a comparable signal-processing approach.
+ 
+- **Cons**:
+  * Larger sensing area may limit integration in confined spaces.
+  * Nonlinear response and hysteresis still require consideration.
+  * Repeatability and long-term stability must be evaluated under the intended loading conditions.
+  * Its suitability depends on the actual contact geometry and required spatial resolution.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity | 5 | 4 |
+| Reliability | 5 | 3 |
+| Size | 4 | 4 |
+| Cost | 3 | 4 |
+|---|---|---|
+|Total Score| 63 | max score : 85 | 
+
+#### `FSR 400 force-sensitive resistor`
+
+- **Description**: The FSR 400 is a thin force-sensitive resistive sensor that changes its electrical resistance in response to an applied force. It can be integrated into the prosthesis to detect contact pressure and provide input for the haptic feedback system. Its analog output can be read by the microcontroller through an ADC and processed using filtering, thresholding, and mapping algorithms to control vibration intensity.
+- **Pros**:
+  * Compact and thin design, suitable for integration into a wearable prosthesis.
+  * Simple analog interface that can be implemented using a voltage divider and a microcontroller ADC.
+  * Responds to changes in applied force, making it suitable for distinguishing relative pressure levels.
+  * Requires relatively little additional electronic circuitry.
+  * Suitable for real-time signal processing and threshold-based haptic feedback.
+ 
+- **Cons**:
+  * The resistance-to-force relationship is nonlinear, requiring calibration and signal mapping.
+  * Hysteresis and measurement variability can affect the consistency of readings.
+  * Long-term drift and mechanical wear may affect repeatability.
+  * Absolute force measurements are less accurate than those obtained using appropriately calibrated load cells.
+  * The sensing area and mounting arrangement must match the mechanical contact surface to obtain representative readings.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity | 5 | 4 |
+| Reliability | 5 | 3 |
+| Size | 4 | 5 |
+| Cost | 3 | 4 |
+|---|---|---|
+|Total Score| 67 | max score : 85 | 
+
+### 4.2.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| FSR402 | 63 | No | Larger sensing area offers less benefit for the available integration space. |
+| FSR400 | 67 | Yes | Compact form factor, simple analog interfacing, and suitability for detecting relative pressure changes.|
+
+### 4.3 Vibration motor selection
+
+The trade-off method used was based on the following criteria : 
+- `Vibration intensity`
+- `Response and controllability`
+- `Size`
+- `Cost`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| Vibration intensity | 5 | The motor shall produce clearly perceptible sensations that allow the user to distinguish between different pressure levels detected by the FSR sensors. Insufficient vibration intensity would reduce the effectiveness of the haptic feedback system.|
+| Response and controllability | 5 | The motor shall respond quickly to changes in the sensor readings and support controllable vibration intensity through PWM. This is essential for translating pressure variations into distinguishable haptic feedback. |
+| Size | 4 | The motor should be compact and lightweight enough to integrate into the prosthesis, particularly near the contact points, without compromising mechanical integration or comfort. |
+| Cost | 3 | The motor should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.3.1 Traded-off design choices
+
+#### `Linear resonant actuator (LRA)`
+
+- **Description**: A linear resonant actuator generates vibrations through the oscillation of an internal moving mass near its mechanical resonant frequency. Unlike an eccentric rotating mass motor, an LRA can offer faster response and more precise vibration control when operated with a compatible driver. It is a potential alternative for applications requiring distinct and repeatable haptic sensations.
+- **Pros**:
+  * Potentially faster startup and stopping response than small ERM motors.
+  * Consistent vibration characteristics when operated near the specified resonant frequency.
+  * Suitable for producing distinguishable haptic patterns and intensity levels with a compatible driver.
+  * Available in compact form factors for wearable applications.
+ 
+- **Cons**:
+  * Requires a compatible driver and appropriate control signals.
+  * Operating frequency is constrained by the actuator's resonance characteristics.
+  * May have a higher overall cost than basic 3 V vibration motors.
+  * Actual vibration intensity depends on the selected actuator, mechanical coupling, and mounting location.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Vibration intensity | 5 | 4 |
+| Response and controllability | 5 | 5 |
+| Size | 4 | 4 |
+| Cost | 3 | 2 |
+|---|---|---|
+|Total Score| 67 | max score : 85 | 
+
+#### `Eccentric Rotating Mass (ERM)`
+
+- **Description**: These compact motors generate mechanical vibrations when supplied with electrical power. Their intensity can be adjusted by controlling the PWM duty cycle, allowing the system to associate different vibration levels with different pressure thresholds measured by the FSR sensors.
+- **Pros**:
+  * Compact and lightweight, making them suitable for integration into a wearable haptic bracelet.
+  * Low operating voltage, compatible with suitable 3 V power and driver circuitry.
+  * Simple control using a microcontroller and an appropriate transistor or motor driver.
+  * Low cost and generally straightforward integration.
+  * PWM control can provide multiple vibration intensity levels.
+ 
+- **Cons**:
+  * Vibration intensity may be insufficient for some users or under certain mounting conditions.
+  * The relationship between PWM duty cycle and perceived vibration intensity is nonlinear.
+  * Small eccentric rotating mass (ERM) motors may have noticeable startup and spin-down delays.
+  * Motor-to-motor variability and mechanical mounting can affect the consistency of sensations.
+  * Direct connection to a microcontroller GPIO is generally unsuitable because the motor may draw more current than the pin can safely supply.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Vibration intensity | 5 | 3 |
+| Response and controllability | 5 | 4 |
+| Size | 4 | 5 |
+| Cost | 3 | 5 |
+|---|---|---|
+|Total Score| 70 | max score : 85 | 
+
+### 4.3.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| Linear resonant actuator (LRA) | 67 | No | Better potential response and control, but higher system cost and additional driver requirements. |
+| Eccentric Rotating Mass (ERM) | 70 | Yes | Low cost, compact dimensions, simple integration, and adequate initial haptic feedback.|
+
+
+4.4 servo+mechanism
+
+### 4.5 Communication selection
+
+The trade-off method used was based on the following criteria : 
+- `User comfort`
+- `Latency`
+- `Reliability`
+- `Flexibility`
+- `Cost and complexity`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| User comfort | 4 | The communication system should avoid physical cables between the prosthesis and the haptic bracelet to prevent restrictions on movement, cable snagging, and discomfort during use. |
+| Latency | 5 | Sensor data shall be transmitted quickly enough for the bracelet to provide timely haptic feedback corresponding to changes in applied pressure. Excessive latency could reduce the naturalness and effectiveness of the feedback. |
+| Reliability | 5 | The communication link shall provide consistent data transmission during normal operation. Packet loss, interference, or disconnections could result in missing or outdated sensor information and inappropriate haptic feedback.|
+| Flexibility | 3 | The bracelet should be detachable and wearable on either the left or right extremity without requiring changes to the physical wiring. Wireless communication facilitates adaptation to different users and configurations.|
+| Cost and complexity | 3 | The communication solution should fit within the project budget and minimize additional hardware. BLE is supported by the selected microcontrollers, although it requires communication firmware and connection management. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.3.1 Traded-off design choices
+
+#### `Wired communication`
+
+- **Description**: A wired connection transmits sensor data directly from the prosthesis to the haptic bracelet through a physical cable. This approach provides a direct communication path and avoids the need for a wireless connection between the two devices.
+- **Pros**:
+  * Low and predictable communication latency.
+  * No wireless interference or radio connection interruptions.
+  * Straightforward data transmission without BLE connection management.
+  * Potentially simpler communication debugging.
+ 
+- **Cons**:
+  * The cable can restrict movement and reduce user comfort.
+  * Physical wiring can snag on surrounding objects or become damaged during use.
+  * The bracelet cannot be freely repositioned between the left and right extremities without accommodating the cable.
+  * Cable connectors and routing increase mechanical complexity and may reduce the practicality of the wearable system.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| User comfort | 4 | 2 |
+| Latency | 5 | 5 |
+| Reliability | 5 | 4|
+| Flexibility | 3 | 2|
+| Cost and complexity | 3 | 4|
+|---|---|---|
+|Total Score| 71 | max score : 100 | 
+
+#### `Wireless communication`
+
+- **Description**: BLE is a wireless communication protocol used to transmit sensor data from the prosthesis to the haptic bracelet. In the current system, the hand-side ESP32-S3 acts as the BLE server, advertising a service and characteristic containing sensor data, while the arm-side ESP32-C3 acts as the client and reads the characteristic. This wireless architecture allows the bracelet to operate independently of the prosthesis's physical position and eliminates the need for a cable between the two devices.
+  
+- **Pros**:
+  * Eliminates physical cables between the prosthesis and the bracelet, improving comfort and freedom of movement.
+  * Allows the bracelet to be worn on either the left or right extremity without changing the physical wiring.
+  * Supported by the selected ESP32 microcontrollers, avoiding the need for a separate BLE module.
+  * Provides sufficient data-transfer capability for the system's sensor readings.
+  * Enables a modular architecture in which the prosthesis and bracelet can be handled as separate wearable units.
+ 
+- **Cons**:
+  * Communication latency and timing variability can delay haptic feedback.
+  * Wireless interference or signal degradation may result in packet loss or temporary disconnections.
+  * BLE connection parameters and characteristic-reading intervals must be configured to achieve responsive operation.
+  * Additional firmware is required for connection establishment, data validation, and disconnection handling.
+  * Stale or missing sensor data must be handled to prevent inappropriate motor activation.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| User comfort | 4 | 5 |
+| Latency | 5 | 3 |
+| Reliability | 5 | 3|
+| Flexibility | 3 | 5|
+| Cost and complexity | 3 | 4|
+|---|---|---|
+|Total Score| 77 | max score : 100 | 
+
+### 4.3.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| Wired communication | 71 | No | Low and predictable latency, but cables restrict movement and reduce flexibility when repositioning the bracelet.|
+| Wireless communication | 77 | Yes | Greater comfort, freedom of movement, and flexibility, with acceptable communication performance subject to latency and reliability validation.|
 
 ## 5. Quality management and compliance
 
