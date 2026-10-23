@@ -276,7 +276,44 @@ Bluetooth (BLE), how receiving works:
 * A size check (value.length() == sizeof(int) * 4) guards against malformed or unexpected packets before processing.
 
 #### 3.3.3 `Mechanics`
-add CAD designs, explain modular system, where cables would go, how the battery/board are going to be placed.
+General structure of the bracelet : The bracelet consists of three parts: the component for finger-pressure feedback, the component for wrist-flexion feedback, and the battery/circuit board section. Finally these parts are all connected by a Velcro strip to fit the arm. 
+
+## The pressure feedback : 
+# Structure : 
+The pressure feedback component consists of three identical modules for providing feedback to the thumb, index finger, and middle finger. Each of these modules measures 32 mm in height, 26 mm in width, and 5 mm in thickness, and consists of three parts:
+* The main body : It includes a hole on each side for the straps to pass through and has a cavity in the center to house the vibrator.
+* The vibrator : It goes in the cavity in the main body of the module.
+* The cap : It enclose the vibrator within the module and allows the cables to pass through via a small hole on the back.
+[Pressure feedback assembly](https://drive.google.com/file/d/1q7tmiTraR-jlEE6LJhXr1u1NyFAoutsr/view?usp=drive_link)
+[Pressure feedback CADs](https://drive.google.com/drive/folders/1Q9jedtYQnt1176AdBbXqwLDbgV0Av4K-?usp=drive_link)
+
+
+## The flexion feedback : 
+# Structure :
+The flexion feedback module is 60mm high, 60mm wide and 21mm thick and consists of five parts :
+* The main body : It includes a hole on each side for the straps to pass through, has un hole for the rail and a place for the servo.
+* The rail : It consists of two parts: the top, which features teeth, and the bottom, which has a 5mm bump. These two parts are held together by two guides on the top piece and a pin at each end of the rail.
+* The servo : It goes in the place in the main body of the module and is coonected to the gear.
+* The gear : It forms the connection between the servo and the rail.
+* The cap : It enclose the servo and allows the cables to pass through via a small hole on the side.
+[Flexion feedback assembly](https://drive.google.com/file/d/1da2Mox3atejDgfT-ykYJN5pDtji0LcrP/view?usp=drive_link)
+[Flexion feedback Cads](https://drive.google.com/drive/folders/18fYBH1grhHKaJqEiLSD7rRKpASQkbYJC?usp=drive_link)
+
+# How it works :
+When the servo activates, it drives the gear, which in turn moves the rail in a linear motion that the user can feel due to the bump.
+
+
+## The battery/board pack : (It will need to be adjusted once we have received the battery and the board)
+# Structure :
+The battery/board module measures 77.7 mm in height, 59 mm in width, and 36 mm in thickness, and consists of six components that fit into one another and are secured by pins:
+* The main body : It includes a hole on each side for the straps to pass through and a place to put the first stage and the battery.
+* The first stage : It is the main part that hold the battery. It is separate from the main body because printing both together would be too complicated due to floating regions.
+* The battery : She's in the first stage and is held in place by the second stage.
+* The second stage : It the part that holds the board and closes the battery section. It is separated from the main body for the same reasons as in the first stage.
+* The board : She's in the second stage and is screwed to it.
+* The cap : It encloses the board and features 2 holes for passing through two LEDs.
+[Battery/board assembly](https://drive.google.com/file/d/13KTVKjT1o8PBZH2u7Te5b1pqeQ4y3S1g/view?usp=drive_link)
+[Battery/board CADs](https://drive.google.com/drive/folders/1uHSiRIowJNreikrxuMxqF4VdFK1-pneW?usp=drive_link)
 
 ### 3.4 Performance budgets and design margins
 
