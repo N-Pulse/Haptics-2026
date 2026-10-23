@@ -278,7 +278,7 @@ flowchart LR
     G --> J
 
 ```
-##### General code architecure
+##### General code architecture
 The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs.
 
 On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the three sensors (pressure sensors) through analogRead(). These three values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy in pack every 5-10 ms (TBD).
