@@ -279,13 +279,6 @@ flowchart LR
     G --> I
     G --> J
 
-    classDef sensors fill:#e8f2ff,stroke:#3973ac,color:#111;
-    classDef processing fill:#eaf7ea,stroke:#4c956c,color:#111;
-    classDef output fill:#fff0dc,stroke:#c58b39,color:#111;
-
-    class A,B,C,D sensors;
-    class E,F,G processing;
-    class H,I,J output;
 ```
 <img width="639" height="1072" alt="Code-Diagram" src="https://github.com/user-attachments/assets/a3da4e7e-9a7a-4fe6-b8fb-c469122cd4e7" />
 
