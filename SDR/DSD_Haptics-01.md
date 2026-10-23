@@ -278,23 +278,24 @@ flowchart LR
     G --> J
 
 ```
-General code explanation: 
-The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs so that each responsibility stays in its own file rather than one large script.
+# General code architecure
+The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs.
 
-On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the four sensors (three pressure sensors and one flex sensor) through analogRead().These four values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy.
+On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the three sensors (pressure sensors) through analogRead(). These three values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy in pack every 5-10 ms (TBD).
 
-On the arm side, the receiver sketch (BLE_receiver.ino) acts as the BLE client: it connects to the sender, listens for incoming data, and unpacks it back into usable values. Each value is applied updateFilter() to smooth out noisy raw readings. Then each filtered value passes through pressureThreshold() or flexionThreshold() to clamp it into a known, safe range.Each pressure value is sent to its corresponding vibration motor, and the flexion value is converted into an angle for the servo, using the mapping functions in mapping.ino. Separately from this Bluetooth data flow, the receiver also reads a thermistor connected directly to its own board, calculates the current temperature, and lights an LED if that temperature crosses a safety threshold. Another LDE lights up when the receiver and the sender are connected via bluetooth and turns off when the two boards lose their link. 
+On the arm side, the receiver sketch (BLE_receiver.ino) acts as the BLE client: it connects to the sender, awaits for incoming data, and unpacks it back into values. Each value is applied updateFilter() to smooth out raw readings. Then each filtered value passes through pressureThreshold() or flexionThreshold() to clamp it into a known, safe range. Each pressure value is sent to its corresponding vibration motor, and the flexion value is converted into an angle for the servomotor, using the mapping functions in (mapping.ino). Separately from this Bluetooth data flow, the receiver also reads a thermistor connected directly to the board, calculates the actual temperature, and lights an LED if that temperature crosses an established safety threshold. Another LED lights up when the receiver and the sender are connected via BLE and turns off when the two boards lose their link. 
 
-Why use thresholds: 
-* Noise filtering: raw ADC readings from resistive sensors fluctuate slightly even at rest, due to electrical noise. A noise floor cutoff (below which a reading is forced to 0) prevents the system from registering “phantom” pressure when nothing is actually being pressed.
-* For safety: sensors can momentarily spike beyond their meaningful operating range. Clamping to a max pressure (and a min/max flexion) guarantees the value sent is always within a known, fixed range, which is required for the mapping step (map()) on the receiver to scale it correctly into motor output. Without this guarantee, an out-of-range spike could translate into an invalid or excessive command to the motors/servo.
+# Thresholding and Amplitude Mapping
 
+The filtered ADC readings are processed using thresholds to improve signal stability, ensure safe operating limits, and make changes in sensation more perceptible. First, a noise-floor threshold suppresses small fluctuations caused by electrical noise in the resistive pressure sensors. Readings below this threshold are set to zero, preventing unintended or “phantom” vibrations when no meaningful pressure is applied. The signals are then clamped to predefined minimum and maximum values to prevent out-of-range measurements from producing invalid motor or servo commands.
 
-Bluetooth (BLE), how receiving works:
-* The two boards use a client-server BLE architecture: the hand-side (testes on a ESP32-S3 for now)  is the server (it creates a service/characteristic and advertises itself), and the arm-side ESP32-C3 is the client (it actively connects to the server’s known address).
-* The client (arm side) doesn’t wait to be told when new data arrives. Instead, it repeatedly checks the server’s characteristic on its own, by calling notify() to signal if new data is available. This is done roughly every 10 milliseconds and it reads whatever value is currently there
-* Data is sent through BLE as raw bytes, not as typed values (BLE has no concept of “int”). The sender packs its array of 4 integers into bytes via a direct memory reinterpretation ((uint8_t*)packet), and the receiver reverses this with memcpy() to reconstruct the same 4 integers on its side.
-* A size check (value.length() == sizeof(int) * 4) guards against malformed or unexpected packets before processing.
+Next, the valid pressure readings are divided into multiple threshold intervals. Each interval corresponds to a different vibration amplitude, allowing the haptic feedback to produce distinct intensity levels rather than small, potentially imperceptible changes in motor output. 
+
+Finally, the resulting values are mapped to the permitted output range of the vibration motors and servomotor mechanism. For vibration motors, the mapped value controls the PWM duty cycle, while for the servomotor, it determines the target angle within its allowed operating range. This approach improves signal robustness, output safety, and the perceptibility of changes in haptic feedback.
+
+# BLE Communication
+
+The two boards communicate using a client–server BLE architecture. The hand-side board, currently tested on an ESP32-S3, acts as the server by creating a BLE service and characteristic and advertising its availability, while the arm-side ESP32-C3 acts as the client and actively connects to the server using its known address. Approximately every 10 milliseconds, the client reads the characteristic to retrieve the latest sensor data. The communication uses raw bytes rather than explicitly typed values: the sender converts an array of three integers into a byte sequence using a pointer cast (`(uint8_t*)packet`), and the receiver uses `memcpy()` to reconstruct the original four integers. Before processing the received data, the client verifies that the payload length matches the expected size (`value.length() == sizeof(int) * 4`), preventing malformed or incomplete packets from being interpreted as valid sensor readings.
 
 #### 3.3.3 `Mechanics`
 General structure of the bracelet : 
