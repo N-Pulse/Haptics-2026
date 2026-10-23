@@ -269,7 +269,7 @@ flowchart LR
     J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
 
     A --> B
-    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"|--> D
+    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
     D --> E
     E --> F
     F --> G
@@ -278,8 +278,6 @@ flowchart LR
     G --> J
 
 ```
-<img width="639" height="1072" alt="Code-Diagram" src="https://github.com/user-attachments/assets/a3da4e7e-9a7a-4fe6-b8fb-c469122cd4e7" />
-
 General code explanation: 
 The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs so that each responsibility stays in its own file rather than one large script.
 
