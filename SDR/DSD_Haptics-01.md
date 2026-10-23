@@ -353,13 +353,12 @@ decisions and records why alternatives were rejected. -->
 
 `<The goal of this section is to go over every other solution you found relevant but that you chose not to pursue.>`
 
-### 4.1 Trade-off method
+### 4.1 Battery selection
 
 The trade-off method used was based on the following criteria : 
-- `<criteria nmbr 1>`
-- `<criteria nmbr 2>`
-- ...
-
+- `safety`
+- `capacity`
+- `size`
 
 `<Describe criteria, weights, and scoring scale. This is a standardized way to explicit your priorities in the design.>`
 
