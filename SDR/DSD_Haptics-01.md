@@ -257,7 +257,7 @@ add schematics, pcb boards, how we designed the power regulators, why we chose t
 # System Flowchart
 
 ```mermaid
-flowchart TD
+flowchart LR
     A["Sensors<br/>3 pressure sensors<br/>1 flexion sensor"]
     B["Hand / Sender<br/>ADC read<br/>analogRead()"]
     C["BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"]
