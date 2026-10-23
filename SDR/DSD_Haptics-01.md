@@ -258,13 +258,13 @@ add schematics, pcb boards, how we designed the power regulators, why we chose t
 
 ```mermaid
 flowchart LR
-    A["Sensors<br/>3 pressure sensors<br/>1 flexion sensor"]
+    A["Sensors<br/><br/>3 pressure sensors<br/>1 flexion sensor"]
     B["Hand / Sender<br/>ADC read<br/>analogRead()"]
     D["ESP32-C3<br/>(Arm / Receiver)"]
     E["Filter each signal<br/>updateFilter()"]
     F["Threshold<br/>pressureThreshold()<br/>flexionThreshold()"]
-    G["MAP → Scaling to range<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
-    H["3 Vibration Motors<br/>1 per finger<br/>setVibrationMotors()"]
+    G["MAP-Scaling to range<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
+    H["3 Vibration Motors<br/><br/>1 per finger<br/>setVibrationMotors()"]
     I["Servos<br/>Flexion & Extension<br/>setServoAngle()"]
     J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
 
