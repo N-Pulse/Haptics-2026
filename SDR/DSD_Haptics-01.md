@@ -377,7 +377,7 @@ Score scale :
 
 ### 4.1.1 Traded-off design choices
 
-#### 4.1.1.1 `Li-Po battery`
+#### `Li-Po battery`
 
 - **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
@@ -390,8 +390,6 @@ Score scale :
   * Requires suitable charging, over-discharge, overcurrent, and temperature protection.
   * A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
   * The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
-  
-#### 4.1.1.2 `Li-Po battery` score
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
@@ -402,7 +400,7 @@ Score scale :
 | ---|---|---|
 |Total Score| 67 | max score : 85 | 
 
-#### 4.1.1.3 `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` score
+#### `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` 
 
 - **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
@@ -431,6 +429,87 @@ Score scale :
 |---|---|---|---|
 | Li-Po Battery | 67 | No | Compact and lightweight, but impact protection and safety requirements need further verification. |
 | 2S1P 7.4V battery pack NCR18650B li-ion 3400mAh | 74 | Yes | Higher total weighted score, sufficient nominal capacity, and an assumed acceptable cost, despite the larger size.|
+
+### 4.2 Pressure sensor selection
+
+The trade-off method used was based on the following criteria : 
+- `Sensitivity`
+- `Reliability`
+- `Size`
+- `Cost`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| Sensitivity | 5 | Sensitivity is essential for detecting variations in applied pressure and translating them into distinguishable vibration intensities. The sensor shall detect meaningful changes in force across the intended operating range. |
+| Reliability | 5 | The sensor shall provide sufficiently consistent readings during repeated use to ensure dependable haptic feedback. Signal drift, hysteresis, mechanical wear, and measurement variability should be considered. |
+| Size | 4 | The sensor should be compact and lightweight enough to integrate into the prosthesis, particularly near the contact points, without compromising mechanical integration or comfort. |
+| Cost | 3 | The sensor should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.1.1 Traded-off design choices
+
+#### `FSR 402 force-sensitive resistor`
+
+- **Description**: The FSR 402 is another force-sensitive resistive sensor that can detect applied pressure and provide an analog signal to the microcontroller. It offers a larger sensing area than the FSR 400, making it a potential alternative where the mechanical contact area is larger or pressure distribution is less localized.
+- **Pros**:
+  * Larger active sensing area may facilitate integration with wider contact surfaces.
+  * Simple analog interfacing with a microcontroller.
+  * Suitable for detecting relative changes in applied force.
+  * Similar operating principle to the FSR 400, allowing a comparable signal-processing approach.
+ 
+- **Cons**:
+  * Larger sensing area may limit integration in confined spaces.
+  * Nonlinear response and hysteresis still require consideration.
+  * Repeatability and long-term stability must be evaluated under the intended loading conditions.
+  * Its suitability depends on the actual contact geometry and required spatial resolution.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity | 5 | 4 |
+| Reliability | 5 | 3 |
+| Size | 4 | 4 |
+| Cost | 3 | 4 |
+| ---|---|---|
+|Total Score| 63 | max score : 85 | 
+
+#### `FSR 400 force-sensitive resistor`
+
+- **Description**: The FSR 400 is a thin force-sensitive resistive sensor that changes its electrical resistance in response to an applied force. It can be integrated into the prosthesis to detect contact pressure and provide input for the haptic feedback system. Its analog output can be read by the microcontroller through an ADC and processed using filtering, thresholding, and mapping algorithms to control vibration intensity.
+- **Pros**:
+  * Compact and thin design, suitable for integration into a wearable prosthesis.
+  * Simple analog interface that can be implemented using a voltage divider and a microcontroller ADC.
+  * Responds to changes in applied force, making it suitable for distinguishing relative pressure levels.
+  * Requires relatively little additional electronic circuitry.
+  * Suitable for real-time signal processing and threshold-based haptic feedback.
+ 
+- **Cons**:
+  * The resistance-to-force relationship is nonlinear, requiring calibration and signal mapping.
+  * Hysteresis and measurement variability can affect the consistency of readings.
+  * Long-term drift and mechanical wear may affect repeatability.
+  * Absolute force measurements are less accurate than those obtained using appropriately calibrated load cells.
+  * The sensing area and mounting arrangement must match the mechanical contact surface to obtain representative readings.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity | 5 | 4 |
+| Reliability | 5 | 3 |
+| Size | 4 | 5 |
+| Cost | 3 | 4 |
+| ---|---|---|
+|Total Score| 67 | max score : 85 | 
+
+### 4.1.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| FSR402 | 63 | No | Larger sensing area offers less benefit for the available integration space. |
+| FSR400 | 67 | Yes | Compact form factor, simple analog interfacing, and suitability for detecting relative pressure changes.|
 
 ## 5. Quality management and compliance
 
