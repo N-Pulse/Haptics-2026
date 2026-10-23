@@ -375,9 +375,9 @@ Score scale :
 > [4] : Meets all minimum requirements and 'should'
 > [5] : Meets all requirements, 'Shall, should & may'
 
-### 4.2 Traded-off design choices
+### 4.1.1 Traded-off design choices
 
-#### 4.2.1 `Li-Po battery`
+#### 4.1.1.1 `Li-Po battery`
 
 - **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
@@ -391,7 +391,7 @@ Score scale :
   * A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
   * The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
   
-#### 4.2.2 `Li-Po battery` score
+#### 4.1.1.2 `Li-Po battery` score
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
@@ -402,7 +402,7 @@ Score scale :
 | ---|---|---|
 |Total Score| 67 | max score : 85 | 
 
-#### 4.2 `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh>` score
+#### 4.1.1.3 `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` score
 
 - **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
@@ -425,7 +425,7 @@ Score scale :
 | ---|---|---|
 |Total Score| 74 | max score : 85 | 
 
-### 4.3 Trade-off summary
+### 4.1.2 Trade-off summary
 
 | Option | Score | Retained | Key reason |
 |---|---|---|---|
