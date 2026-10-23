@@ -356,25 +356,19 @@ decisions and records why alternatives were rejected. -->
 ### 4.1 Battery selection
 
 The trade-off method used was based on the following criteria : 
-- `safety`
-- `capacity`
-- `size`
-
-`<Describe criteria, weights, and scoring scale. This is a standardized way to explicit your priorities in the design.>`
+- `Patient safety`
+- `Battery capacity/performance`
+- `Size`
+- `Cost`
 
 <span style='color: red;'> The table given below is an example. Adapt it with the above mentionned criterias</span>
 
-`<example for an ADC chip for a proof of concept board>`
-
-
 | Criterion | Weight (1 - 5) | Rationale for weight |
 |---|---|---|
-| Meets performance requirements | 5 | This ADC was chosen to be part of a first proof of concept. As such, performance is the priority. |
-| Safety and biosafety | 3 | ADC is not in direct contact with the patient. While a medical approved chip is favourable, it is not mandatory |
-| Cost | 3 | This is a proof of concept. The ADC is ordered in small batch and as such prices are higher. Additionally, budget is a constraint for this board  |
-| Reproducibility and accessibility | 4 | Proof of concept. By definition needs to work reliabily and predictably |
-| Supply chain robustness  | 2 | This ADC has high performance requirements that cannot be fulfilled with common chips. |
-| Maintainability and community support | 1 | This is not expected to be replaced, changed or maintained. |
+| Patient safety | 5 | Patient safety is the highest priority, as accidental drops or mechanical impacts could damage the battery, potentially causing an internal short circuit, thermal runaway, fire, or explosion, and consequently injuring the patient. The battery should therefore have a robust protective casing and appropriate protection against physical damage, overcharging, over-discharging, and short circuits. An NTC thermistor should monitor battery temperature to enable protective measures if unsafe temperatures are detected. |
+| Battery capacity/performance | 5 | The battery shall meet the system's power requirements, provide a 7.4 V output, and have a minimum capacity of 3000 mAh to ensure sufficient operating time (4 hours). |
+| Size | 4 | The battery should be compact and lightweight enough to integrate into the wearable system without significantly compromising user comfort, mobility, or ergonomics. |
+| Cost | 3 | The battery should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
 
 Score scale : 
 > [1] : Does not meet any requirements
@@ -385,49 +379,60 @@ Score scale :
 
 ### 4.2 Traded-off design choices
 
-#### 4.2.1 `<Alternative design choice A>`
+#### 4.2.1 `<Li-Po battery>`
 
-- **Description:**
+- **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
+  *High energy density, allowing a compact and lightweight design.
+  *Flexible form factors that can facilitate integration into a wearable device.
+  *High discharge capability, depending on the selected battery specification.
+  *Potential for improved user comfort due to reduced weight and compact dimensions.
 - **Cons**:
-
-#### 4.2.2 `<Alternative design choice A>` score
-
- 
+  *Vulnerable to physical damage, punctures, and deformation, which may cause internal short circuits or thermal runaway.
+  *Requires suitable charging, over-discharge, overcurrent, and temperature protection.
+  *A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
+  *The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
+  
+#### 4.2.2 `<Li-Po battery>` score
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
-| Meets performance requirements | 5 | 3 |
-| Safety and biosafety | 3 | 5 |
-| Cost | 3 | 1 |
-| Reproducibility and accessibility | 4 | 4 |
-| Supply chain robustness* | 2 | 2 |
-| Maintainability and community support | 1 | 1 |
+| Patient safety | 5 | 2 |
+| Battery capacity/performance | 5 | 5 |
+| Size | 4 | 5 |
+| Cost | 3 | 4 |
 | ---|---|---|
-|Total Score| 54 | max score : 90 | 
+|Total Score| 67 | max score : 85 | 
 
-#### 4.2 `<Retained design choice>` score
+#### 4.2 `<2S1P 7.4V battery pack NCR18650B li-ion 3400mAh>` score
 
+- **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
+  *Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
+  *Nominal voltage compatible with a system designed for a 2-cell lithium-ion pack, subject to voltage regulation.
+  *Standard cylindrical cells can be integrated into a rigid protective enclosure.
+  *Potentially good availability and cost-effectiveness, depending on the supplier and pack configuration.
 - **Cons**:
+  *Larger and potentially heavier than a comparable Li-Po battery, which may reduce wearable comfort.
+  *Requires a suitable 2S BMS, cell balancing, and a charger compatible with the pack's full-charge voltage.
+  *The enclosure must protect the cells from impacts, crushing, and other mechanical damage
+  *The additional weight and volume may constrain the mechanical design and placement of the battery.
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
-| Meets performance requirements | 5 | 4 |
-| Safety and biosafety | 3 | 3 |
-| Cost | 3 | 3 |
-| Reproducibility and accessibility | 4 | 4 |
-| Supply chain robustness* | 2 | 3 |
-| Maintainability and community support | 1 | 2 |
+| Patient safety | 5 | 5 |
+| Battery capacity/performance | 5 | 5 |
+| Size | 4 | 3 |
+| Cost | 3 | 4 |
 | ---|---|---|
-|Total Score| 62 | max score : 90 | 
+|Total Score| 74 | max score : 85 | 
 
 ### 4.3 Trade-off summary
 
 | Option | Score | Retained | Key reason |
 |---|---|---|---|
-| Retained concept | 62 | Yes | Better performance, lower price |
-| Alternative A | 54 | No | Too expensive, lower performance|
+| Li-Po Battery | 67 | No | Compact and lightweight, but impact protection and safety requirements need further verification. |
+| 2S1P 7.4V battery pack NCR18650B li-ion 3400mAh | 74 | Yes | Higher total weighted score, sufficient nominal capacity, and an assumed acceptable cost, despite the larger size.|
 
 ## 5. Quality management and compliance
 
