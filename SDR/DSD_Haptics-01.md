@@ -260,7 +260,6 @@ add schematics, pcb boards, how we designed the power regulators, why we chose t
 flowchart LR
     A["Sensors<br/>3 pressure sensors<br/>1 flexion sensor"]
     B["Hand / Sender<br/>ADC read<br/>analogRead()"]
-    C["BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"]
     D["ESP32-C3<br/>(Arm / Receiver)"]
     E["Filter each signal<br/>updateFilter()"]
     F["Threshold<br/>pressureThreshold()<br/>flexionThreshold()"]
@@ -270,8 +269,7 @@ flowchart LR
     J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
 
     A --> B
-    B --> C
-    C --> D
+    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
     D --> E
     E --> F
     F --> G
