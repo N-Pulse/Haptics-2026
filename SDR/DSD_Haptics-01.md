@@ -258,18 +258,18 @@ add schematics, pcb boards, how we designed the power regulators, why we chose t
 
 ```mermaid
 flowchart LR
-    A["Sensors<br/><br/>3 pressure sensors<br/>1 flexion sensor"]
-    B["Hand / Sender<br/>ADC read<br/>analogRead()"]
-    D["ESP32-C3<br/>(Arm / Receiver)"]
-    E["Filter each signal<br/>updateFilter()"]
-    F["Threshold<br/>pressureThreshold()<br/>flexionThreshold()"]
-    G["MAP-Scaling to range<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
-    H["3 Vibration Motors<br/><br/>1 per finger<br/>setVibrationMotors()"]
-    I["Servos<br/>Flexion & Extension<br/>setServoAngle()"]
-    J["Thermistor<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
+    A["Sensors:<br/><br/>3 pressure sensors<br/>1 flexion sensor"]
+    B["Hand / Sender<br/>ADC read:<br/>analogRead()"]
+    D["Arm / Receiver<br/>ESP32-C3 Super Mini"]
+    E["Filter each signal:<br/>updateFilter()"]
+    F["Threshold:<br/>pressureThreshold()<br/>flexionThreshold()"]
+    G["MAP-Scaling to range:<br/>mapToVibrationDuty()<br/>mapToServoAngle()"]
+    H["3 Vibration Motors <br/> (1 per finger):<br/>setVibrationMotors()"]
+    I["Servomotor<br/>Flexion & Extension:<br/>setServoAngle()"]
+    J["Thermistor:<br/>readTemperature()<br/>updateLED()<br/>updateBluetoothLED()"]
 
     A --> B
-    B -->|"BLE<br/>Sends arrays with 3 numbers as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
+    B -->|"BLE<br/>Send arrays as raw bytes (16 bytes)<br/>from pressure sensors and 1 from flexion"| D
     D --> E
     E --> F
     F --> G
