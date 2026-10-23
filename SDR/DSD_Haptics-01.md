@@ -452,7 +452,7 @@ Score scale :
 > [4] : Meets all minimum requirements and 'should'
 > [5] : Meets all requirements, 'Shall, should & may'
 
-### 4.1.1 Traded-off design choices
+### 4.2.1 Traded-off design choices
 
 #### `FSR 402 force-sensitive resistor`
 
@@ -504,7 +504,7 @@ Score scale :
 |---|---|---|
 |Total Score| 67 | max score : 85 | 
 
-### 4.1.2 Trade-off summary
+### 4.2.2 Trade-off summary
 
 | Option | Score | Retained | Key reason |
 |---|---|---|---|
@@ -533,7 +533,7 @@ Score scale :
 > [4] : Meets all minimum requirements and 'should'
 > [5] : Meets all requirements, 'Shall, should & may'
 
-### 4.1.1 Traded-off design choices
+### 4.3.1 Traded-off design choices
 
 #### `Linear resonant actuator (LRA)`
 
@@ -585,12 +585,101 @@ Score scale :
 |---|---|---|
 |Total Score| 70 | max score : 85 | 
 
-### 4.1.2 Trade-off summary
+### 4.3.2 Trade-off summary
 
 | Option | Score | Retained | Key reason |
 |---|---|---|---|
 | Linear resonant actuator (LRA) | 67 | No | Better potential response and control, but higher system cost and additional driver requirements. |
 | Eccentric Rotating Mass (ERM) | 70 | Yes | Low cost, compact dimensions, simple integration, and adequate initial haptic feedback.|
+
+
+4.4 servo+mechanism
+
+### 4.5 Communication selection
+
+The trade-off method used was based on the following criteria : 
+- `User comfort`
+- `Latency`
+- `Reliability`
+- `Flexibility`
+- `Cost and complexity`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| User comfort | 4 | The communication system should avoid physical cables between the prosthesis and the haptic bracelet to prevent restrictions on movement, cable snagging, and discomfort during use. |
+| Latency | 5 | Sensor data shall be transmitted quickly enough for the bracelet to provide timely haptic feedback corresponding to changes in applied pressure. Excessive latency could reduce the naturalness and effectiveness of the feedback. |
+| Reliability | 5 | The communication link shall provide consistent data transmission during normal operation. Packet loss, interference, or disconnections could result in missing or outdated sensor information and inappropriate haptic feedback.|
+| Flexibility | 3 | The bracelet should be detachable and wearable on either the left or right extremity without requiring changes to the physical wiring. Wireless communication facilitates adaptation to different users and configurations.|
+| Cost and complexity | 3 | The communication solution should fit within the project budget and minimize additional hardware. BLE is supported by the selected microcontrollers, although it requires communication firmware and connection management. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.3.1 Traded-off design choices
+
+#### `Wired communication`
+
+- **Description**: A wired connection transmits sensor data directly from the prosthesis to the haptic bracelet through a physical cable. This approach provides a direct communication path and avoids the need for a wireless connection between the two devices.
+- **Pros**:
+  * Low and predictable communication latency.
+  * No wireless interference or radio connection interruptions.
+  * Straightforward data transmission without BLE connection management.
+  * Potentially simpler communication debugging.
+ 
+- **Cons**:
+  * The cable can restrict movement and reduce user comfort.
+  * Physical wiring can snag on surrounding objects or become damaged during use.
+  * The bracelet cannot be freely repositioned between the left and right extremities without accommodating the cable.
+  * Cable connectors and routing increase mechanical complexity and may reduce the practicality of the wearable system.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| User comfort | 4 | 2 |
+| Latency | 5 | 5 |
+| Reliability | 5 | 4|
+| Flexibility | 3 | 2|
+| Cost and complexity | 3 | 4|
+|---|---|---|
+|Total Score| 71 | max score : 100 | 
+
+#### `Wireless communication`
+
+- **Description**: BLE is a wireless communication protocol used to transmit sensor data from the prosthesis to the haptic bracelet. In the current system, the hand-side ESP32-S3 acts as the BLE server, advertising a service and characteristic containing sensor data, while the arm-side ESP32-C3 acts as the client and reads the characteristic. This wireless architecture allows the bracelet to operate independently of the prosthesis's physical position and eliminates the need for a cable between the two devices.
+  
+- **Pros**:
+  * Eliminates physical cables between the prosthesis and the bracelet, improving comfort and freedom of movement.
+  * Allows the bracelet to be worn on either the left or right extremity without changing the physical wiring.
+  * Supported by the selected ESP32 microcontrollers, avoiding the need for a separate BLE module.
+  * Provides sufficient data-transfer capability for the system's sensor readings.
+  * Enables a modular architecture in which the prosthesis and bracelet can be handled as separate wearable units.
+ 
+- **Cons**:
+  * Communication latency and timing variability can delay haptic feedback.
+  * Wireless interference or signal degradation may result in packet loss or temporary disconnections.
+  * BLE connection parameters and characteristic-reading intervals must be configured to achieve responsive operation.
+  * Additional firmware is required for connection establishment, data validation, and disconnection handling.
+  * Stale or missing sensor data must be handled to prevent inappropriate motor activation.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| User comfort | 4 | 5 |
+| Latency | 5 | 3 |
+| Reliability | 5 | 3|
+| Flexibility | 3 | 5|
+| Cost and complexity | 3 | 4|
+|---|---|---|
+|Total Score| 77 | max score : 100 | 
+
+### 4.3.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| Wired communication | 71 | No | Low and predictable latency, but cables restrict movement and reduce flexibility when repositioning the bracelet.|
+| Wireless communication | 77 | Yes | Greater comfort, freedom of movement, and flexibility, with acceptable communication performance subject to latency and reliability validation.|
 
 ## 5. Quality management and compliance
 
