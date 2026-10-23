@@ -511,6 +511,87 @@ Score scale :
 | FSR402 | 63 | No | Larger sensing area offers less benefit for the available integration space. |
 | FSR400 | 67 | Yes | Compact form factor, simple analog interfacing, and suitability for detecting relative pressure changes.|
 
+### 4.3 Vibration motor selection
+
+The trade-off method used was based on the following criteria : 
+- `Vibration intensity`
+- `Response and controllability`
+- `Size`
+- `Cost`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| Vibration intensity | 5 | The motor shall produce clearly perceptible sensations that allow the user to distinguish between different pressure levels detected by the FSR sensors. Insufficient vibration intensity would reduce the effectiveness of the haptic feedback system.|
+| Response and controllability | 5 | The motor shall respond quickly to changes in the sensor readings and support controllable vibration intensity through PWM. This is essential for translating pressure variations into distinguishable haptic feedback. |
+| Size | 4 | The motor should be compact and lightweight enough to integrate into the prosthesis, particularly near the contact points, without compromising mechanical integration or comfort. |
+| Cost | 3 | The motor should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.1.1 Traded-off design choices
+
+#### `Linear resonant actuator (LRA)`
+
+- **Description**: A linear resonant actuator generates vibrations through the oscillation of an internal moving mass near its mechanical resonant frequency. Unlike an eccentric rotating mass motor, an LRA can offer faster response and more precise vibration control when operated with a compatible driver. It is a potential alternative for applications requiring distinct and repeatable haptic sensations.
+- **Pros**:
+  * Potentially faster startup and stopping response than small ERM motors.
+  * Consistent vibration characteristics when operated near the specified resonant frequency.
+  * Suitable for producing distinguishable haptic patterns and intensity levels with a compatible driver.
+  * Available in compact form factors for wearable applications.
+ 
+- **Cons**:
+  * Requires a compatible driver and appropriate control signals.
+  * Operating frequency is constrained by the actuator's resonance characteristics.
+  * May have a higher overall cost than basic 3 V vibration motors.
+  * Actual vibration intensity depends on the selected actuator, mechanical coupling, and mounting location.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Vibration intensity | 5 | 4 |
+| Response and controllability | 5 | 5 |
+| Size | 4 | 4 |
+| Cost | 3 | 2 |
+|---|---|---|
+|Total Score| 67 | max score : 85 | 
+
+#### `Eccentric Rotating Mass (ERM)`
+
+- **Description**: These compact motors generate mechanical vibrations when supplied with electrical power. Their intensity can be adjusted by controlling the PWM duty cycle, allowing the system to associate different vibration levels with different pressure thresholds measured by the FSR sensors.
+- **Pros**:
+  * Compact and lightweight, making them suitable for integration into a wearable haptic bracelet.
+  * Low operating voltage, compatible with suitable 3 V power and driver circuitry.
+  * Simple control using a microcontroller and an appropriate transistor or motor driver.
+  * Low cost and generally straightforward integration.
+  * PWM control can provide multiple vibration intensity levels.
+ 
+- **Cons**:
+  * Vibration intensity may be insufficient for some users or under certain mounting conditions.
+  * The relationship between PWM duty cycle and perceived vibration intensity is nonlinear.
+  * Small eccentric rotating mass (ERM) motors may have noticeable startup and spin-down delays.
+  * Motor-to-motor variability and mechanical mounting can affect the consistency of sensations.
+  * Direct connection to a microcontroller GPIO is generally unsuitable because the motor may draw more current than the pin can safely supply.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Vibration intensity | 5 | 3 |
+| Response and controllability | 5 | 4 |
+| Size | 4 | 5 |
+| Cost | 3 | 5 |
+|---|---|---|
+|Total Score| 70 | max score : 85 | 
+
+### 4.1.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| Linear resonant actuator (LRA) | 67 | No | Better potential response and control, but higher system cost and additional driver requirements. |
+| Eccentric Rotating Mass (ERM) | 70 | Yes | Low cost, compact dimensions, simple integration, and adequate initial haptic feedback.|
+
 ## 5. Quality management and compliance
 
 **WORK IN PROGRESS**
