@@ -96,6 +96,7 @@ proposed (issue, RFC, pull request)? -->
 | `NTC` | `Negative Temperature Coefficient` |
 | `PCB` | `Printed Circuit Board` |
 | `PWM` | `Pulse Width Modulation` |
+| `IC`  | `Integrated Circuit` |
 
 ## 2. Requirements and traceability
 
@@ -252,96 +253,125 @@ stages. Include entry and exit conditions and what is active in each. -->
 
 #### 3.3.1 `Electronics circuits`
 
-This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, microcontroller, motor drivers, temperature monitoring, and status LED interfaces into a single 2-layers board (36x45 mm).
+This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, MCU, motor drivers, temperature monitoring, and status LED interfaces into a single 2-layers board (36x45 mm) with 4 M2 mounting holes.
 
-![PCB layout of the latest system iteration, highlighting the main functional blocks.](images/PCB_with_labels.png)
+<p align="center">
+  <img src="images/PCB_with_labels.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 1: PCB layout of the latest system iteration, highlighting the main functional blocks.</em>
+</p>
+
 
 ###### 3.3.1.1 `Battery Connection and Temperature`
 
-The battery interface provides the electrical connection between the battery and the PCB, enables manual system power control, and supports battery temperature monitoring to improve system safety.
+The battery interface provides the electrical connection between the battery and the PCB, enables manual system power via a rocker switch, and supports battery temperature monitoring to improve system safety.
 
-<!--[Insert zoomed-in schematic of the battery interface and temperature monitoring circuit]-->
+<p align="center">
+  <img src="images/schematic_battery.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 2: Schematic of the battery connector and temperature monitoring circuit.</em>
+</p>
 
-Figure XX illustrates the battery connector and temperature monitoring circuit.
-
-The battery interface consists of a four-pin header connector, connected to the temperature monitoring circuit. The functions of the four connector pins are described below:
-- **Pin 1 - Switch ground**: Connected to the external switch ([insert switch model]) and provides the ground connection required for its operation when the system is manually switched off.
-- **Pin 2 – Battery supply (`BatOn`)**: Receives the battery supply voltage when the external switch is activated, enabling the system to be powered on and off manually by the user.
+The battery interface consists of a four-pin header connector `J4`, connected to the temperature monitoring circuit (`TempResistor`). The functions of the four connector pins are described below:
+- **Pin 1 - Switch ground**: Connected to the external switch (E-Switch, RA12131121) and provides the ground connection required for its operation when the system is manually switched off.
+- **Pin 2 – Battery supply (`BatOn`)**: Receives the battery supply voltage when the external switch is manually activated by the user.
 - **Pin 3 – Ground**: Connected to the battery ground, providing a common ground reference for the PCB and external components.
 - **Pin 4 – Temperature sensing**: Connected to the battery's temperature-dependent resistive wire, whose resistance decreases as the battery temperature increases (NTC).
 
 The temperature monitoring circuit uses a voltage divider to convert the temperature-dependent resistance into a voltage at the node labelled `Temp`. This voltage is read by the MCU, which uses it to determine whether the battery temperature has exceeded the defined safety threshold and whether the system should be switched off.
 
 The 10 kΩ resistor `R4` is used as part of the voltage divider to establish the relationship between the temperature-dependent resistance and the voltage measured at the `Temp` node. Its selection is based on the nominal resistance range of the temperature-dependent resistive wire and the desired measurement sensitivity. 
-(should i insert model and give more info about component?)
+The 100 nF capacitor `C2` is connected to node `Temp` and is intended to filter voltage fluctuations and stabilize the temperature measurement. Its capacitance was selected based on standard heuristics, a 100nF is a baseline local bypass value.
 
-The 100 nF capacitor `C2` is connected to node `Temp` and is intended to filter voltage fluctuations and stabilize the temperature measurement. Its capacitance was selected based on standard heuristics, a 100nF is a baseline local bypass value because it adequately supplies high-frequency transient demands for standard gate speeds without excessive physical size. (should i insert model and give more info about component?)
+The external switch (E-Switch, RA12131121) is a rocker switch, that was selected to provide ease of use for the user, simplfied mechanical integration (snap-in mounting) within the bracelet, and suitable current and voltage ratings for the external battery. 
 
-The external switch (E-Switch, RA12131121) is a rocker switch, that was selected to provide ease of use for the usr, simplfied mechanical integration (snap-in mounting) with the CAD model of the bracelet and suitable current and voltage ratings for the external battery. 
-(should i insert values? current rating of the switch: 16A and voltage rating: 125VAC (but we are using DC))
+The `Temp` signal is connected to MCU pin `GPIO7`, which monitors the voltage and triggers a system shutdown when the defined temperature threshold is reached. The corresponding threshold will be set experimentally to be associated with a battery temperature of 40°C.
 
-
-The `Temp` signal is connected to MCU pin `GPIO7`, which monitors the voltage and triggers a system shutdown when the defined temperature threshold is reached. The corresponding threshold is will be set experimentally to be associated with a battery temperature of 40°C (i think we said 40).
-
-The manual power switch and temperature monitoring circuit therefore provide two complementary functions: user-controlled power management and temperature-based system protection.
+The manual power switch and temperature monitoring circuit therefore provide user-controlled power management and temperature-based system protection.
 
 ##### 3.3.1.2 `Power Supply: 5 V and 3.3 V Rails`
 
 The power supply consists of two DC–DC buck converters that convert the battery voltage into regulated 5 V and 3.3 V supply rails. The 5 V rail powers the servomotor, while the 3.3 V rail supplies the MCU and the three vibration motor drivers. Using two converters allows each part of the system to receive the voltage it requires.
 
-<!--[Insert zoomed-in schematic of the 5 V and 3.3 V power supply circuits]-->
-
-Figure XX illustrates the schematics of the two power supply circuits.
+<p align="center">
+  <img src="images/schematic_powerboards.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 3: Schematic of the two power supply circuits.</em>
+</p>
 
 The 5 V rail is generated by the Texas Instruments TPS62153 integrated circuit (`IC5`), while the 3.3 V rail is generated by the TPS62142 (`IC4`). Both are buck converters, which reduce the battery voltage to a lower, regulated output voltage.
-Each converter uses an inductor, input and output capacitors, a soft-start capacitor, and a resistor connected to the `PG` output. The inductors `L3` and `L2` (2.2 µH) are part of the switching circuits that transfer energy from the input to the output. The input capacitors `C12` and `C9` (10 µF) help stabilize the voltage supplied to the converters, while the output capacitors `C13` and `C10` (22 µF) smooth the output voltage and help handle sudden changes in load current.
-The capacitors connected to the `SS/TR` pins control the soft-start behaviour of the converters. Soft-start allows the output voltage to rise gradually when the circuit is switched on, reducing the initial current demand. `C11` (620 pF) is used in the 5 V circuit, while `C8` (390 pF) is used in the 3.3 V circuit. Resistors `R6` and `R5` (100 kΩ) connect the PG pins to their respective output rails. These resistors act as pull-ups for the converters' power-good signals, which indicate whether the output voltage has reached an acceptable level.
+Each converter uses an inductor, input and output capacitors, a soft-start capacitor, and a resistor connected to the `PG` pin. The inductors `L3` and `L2` (2.2 µH) are part of the switching circuits that transfer energy from the input to the output. The input capacitors `C12` and `C9` (10 µF) help stabilize the voltage supplied to the converters from `BatOn`, while the output capacitors `C13` and `C10` (22 µF) smooth the output voltage and help handle sudden changes in load current.
+The capacitors connected to the `SS/TR` pins control the soft-start behaviour of the converters. Soft-start allows the output voltage to rise gradually when the circuit is switched on, reducing the initial current demand. `C11` (620 pF) is used in the 5 V circuit, while `C8` (390 pF) is used in the 3.3 V circuit. Resistors `R6` and `R5` (100 kΩ) connect the `PG` pins to their respective output rails. These resistors act as pull-up for the converters' power-good signals, which indicate whether the output voltage has reached an acceptable level.
 
-The converter circuits and their external components were selected using Texas Instruments' WEBENCH® Power Designer, a tool for designing switching power supplies and selecting suitable components. The design was based on the required output voltages, the battery's input voltage range, and the expected load currents.
+The converter ICs and their external components were selected using Texas Instruments' WEBENCH® Power Designer, a tool for designing switching power supplies and selecting suitable components. The design was based on the required output voltages, the battery's input voltage range, and the expected load currents.
 
 The PCB layout was designed with reference to the manufacturer's layout recommendations. The placement of components and routing of tracks are important in switching power supplies because they affect electrical noise, unwanted voltage variations, and power losses.
 
-The input capacitors were placed close to the converter ICs to reduce the length of the paths carrying rapidly changing currents. The inductors were placed close to the switching nodes, and high-current tracks were kept short to reduce resistance and unwanted electrical effects. The output voltage-sensing connections were routed close to the output capacitors and away from the switching nodes to reduce interference with these sensitive signals. The analog ground (`AGND`), power ground (`PGND`), and exposed thermal pad were connected to the common ground according to the manufacturer's recommendations. The thermal pad also helps transfer heat from the IC to the PCB.
-The battery connector was positioned near the power supply circuits.
+The input capacitors were placed close to the converter ICs to reduce the length of the paths carrying rapidly changing currents. The inductors were placed close to the switching nodes, and high-current tracks were kept short to reduce resistance and unwanted electrical effects. The output voltage-sensing connections were routed close to the output capacitors and away from the switching nodes to reduce interference with these sensitive signals. The analog ground (`AGND`), power ground (`PGND`), and exposed thermal pad were connected to the common ground. 
 
-Finally, the two converters share the battery input (`BatOn`) and a common ground reference, while providing separate regulated outputs for the system's components.
+The battery connector `J4` was positioned near the power supply circuits. The two converters share the battery input (`BatOn`) and the ground reference, while providing separate regulated outputs for the system's components.
 
-##### 3.3.1.3 `Microcontroller and Peripheral Interfaces`
+##### 3.3.1.3 `Microcontroller`
 
-The microcontroller used in the system is the ESP32-C3 SuperMini, which coordinates the operation of the servomotor and the three vibration motors based on pressure data received from the prosthesis main board. It communicates with the main board via BLE and generates PWM signals to control motor actuation. The microcontroller also controls two status LEDs, which indicate the temperature-monitoring and BLE communication status.
+The MCU used in the system is the ESP32-C3 SuperMini, which coordinates the operation of the servomotor and the three vibration motors based on pressure data received from the prosthesis main board. It communicates with the main board via BLE and generates PWM signals to control motor actuation. The microcontroller also controls two status LEDs, which indicate the temperature-monitoring and BLE communication status.
 
+<p align="center">
+  <img src="images/schematic_MCU.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 4: Schematic of MCU.</em>
+</p>
 
-<!--[Insert zoomed-in schematic of the circuit]-->
+The servomotor control signal `M4` is connected to `GPIO10` pin. The three vibration motor drivers `M1`, `M2` and `M3` are controlled through `GPIO0`, `GPIO1`, and `GPIO3` pins, respectively. PWM signals allow the motor actuation to be adjusted by varying the duty cycle. The vibration motors are connected through transistor-based driver circuits (see Section [3.3.1.4](#motor-drivers)), since the MCU GPIOs cannot directly supply the current required by the motors.
 
-The servomotor control signal is connected to `GPIO10`. The three vibration motor drivers are controlled through `GPIO0`, `GPIO1`, and `GPIO3`, respectively. PWM signals allow the motor actuation to be adjusted by varying the duty cycle. The vibration motors are connected through transistor-based driver circuits, as described in Section [3.3.1.4], since the microcontroller GPIOs cannot directly supply the current required by the motors.
+The MCU also controls two status LEDs: the temperature-monitoring LED (`LEDTemp`) through `GPIO5` and the BLE status LED (`LEDBLE`) through `GPIO6` to  provide visual indications of the system's operating status (see Section [3.3.2](#332-firmware)).
 
-The microcontroller also controls two status LEDs: the temperature-monitoring LED (`LEDTemp`) through `GPIO5` and the BLE status LED (`LEDBLE`) through `GPIO6` to  provide visual indications of the system's operating stat (see Section [3.3.2]).
+The pressure data received via BLE from the prosthesis main board are processed by the firmware (see Section [3.3.2](#332-firmware)), which determines the corresponding motor commands. These commands are then translated into PWM signals to control the servomotor and vibration motor drivers.
 
-Communication with the prosthesis main board is performed via BLE. The pressure data received wirelessly are processed by the firmware (see Section [3.3.2]), which determines the corresponding motor commands. These commands are then translated into PWM signals to control the servomotor and vibration motor drivers.
+The ESP32-C3 is powered by the regulated 3.3 V rail and connected to the common ground. `GPIO8`, `GPIO9`, `GPIO20`, `GPIO4`, and `GPIO2` are left unconnected in the current design because they are not required for the implemented functionality. 
 
-The ESP32-C3 is powered by the regulated 3.3 V rail and connected to the common ground. `GPIO8`, `GPIO9`, `GPIO20`, `GPIO4`, and `GPIO2` are left unconnected in the current design because they are not required for the implemented functionality [documentation said it was better not use them].
+The ESP32-C3 SuperMini is mounted on the PCB using through-hole pin headers.
 
 ##### 3.3.1.4 `Transistor-Based Motor Drivers and Motor Connectors`  
+<a id="motor-drivers"></a>
 
-The three vibration motors are controlled by three transistor-based driver circuits that allow the MCU to regulate motor activation without supplying the motor current directly through its GPIO pins. Each driver uses an N-channel MOSFET configured as a low-side switch, controlled by a PWM signal generated by the MCU.
+The three vibration motors (`M1`, `M2`, and `M3`) are controlled by transistor-based driver circuits, which allow the MCU to regulate motor activation without supplying the motor current directly through its GPIO pins. Each driver uses an N-channel MOSFET configured as a low-side switch, controlled by a PWM signal generated by the MCU.
 
-<!--[Insert zoomed-in schematic of the circuit]-->
+A 6-pin header connector interfaces the three vibration motors with the driver circuits. Each motor is connected between two terminals: `M_out1`, connected to the regulated 3.3 V rail, and `M_out2`, connected to the MOSFET drain. 
+A separate 3-pin header connects the servomotor to the PCB. Its pins provide the PWM control signal (`M4`), ground, and the regulated 5 V supply, respectively.
 
-The switching component is the AO3400A MOSFET (`Q1`, `Q2`, `Q3`) from Alpha & Omega Semiconductor Inc. Its source is connected to ground, while its drain is connected to one terminal of the motors through the `M1out2`, `M2out2`, `M3out2` connections. The other motor terminals, `M1out1`, `M2out1`, `M3out1`, are connected to the regulated 3.3 V rail. When the MOSFET is switched on, current flows from the 3.3 V supply through the motor and the MOSFET to ground, activating the motor. When the MOSFET is switched off, the current path is interrupted and the motor is deactivated. By switching the MOSFET using a PWM signal, the MCU can adjust the motor's effective power by varying the duty cycle.
+<p align="center">
+  <img src="images/schematic_motordrivers.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 5: Schematic of the three vibration motor drivers and the connectors for the vibration motors and servomotor.</em>
+</p>
 
-The MOSFET gates are controlled by the MCU signals `M1in`, `M2in`, `M3in` through the resistors `R8`, `R12`, `R10` (220 Ω), respectively. These series resistors limit the current flowing into the gates during switching. Resistors `R7`, `R10`, `R9` (10 kΩ) connect the gates to ground acting as pull-down resistances, keeping the MOSFET off when the control signal is low or not actively driven.
+The switching components (`Q1`, `Q2`, and `Q3`) are AO3400A N-channel MOSFETs manufactured by Alpha & Omega Semiconductor Inc. Their sources are connected to ground, while their drains are connected to the respective motor terminals (`M1out2`, `M2out2`, and `M3out2`). The other motor terminals (`M1out1`, `M2out1`, and `M3out1`) are connected to the regulated 3.3 V rail. When a MOSFET is switched on, current flows from the 3.3 V supply through the corresponding motor and MOSFET to ground, activating the motor. When the MOSFET is switched off, the supply current is interrupted. By driving the MOSFETs with PWM signals, the MCU adjusts the effective power delivered to each motor by varying the duty cycle.
 
-The AO3400A was selected as a compact N-channel MOSFET suitable for switching applications. Its low on-state resistance at gate-source voltages of 2.5 V and 4.5 V supports operation with the ESP32-C3's 3.3 V control signals. The final selection also accounts for the vibration motor's operating and startup currents [check].
+The MOSFET gates are controlled by the MCU signals `M1in`, `M2in`, and `M3in` through the 220 Ω series resistors `R8`, `R12`, and `R10`, respectively. These resistors limit the transient current required to charge and discharge the MOSFET gate capacitances during switching. The 10 kΩ pull-down resistors (`R7`, `R11`, and `R9`) connect the gates to ground, ensuring that the MOSFETs remain off when the corresponding control signals are low or not actively driven.
 
-Two additional components are connected in parallel with the motors. Capacitors `C3`, `C5`, `C4` (100 nF) help suppress high-frequency electrical noise generated by the motor. Schottky diodes `D5`, `D6`, `D4` provide a path for the inductive current when the MOSFET switches off, helping limit voltage spikes that could otherwise damage the switching transistor. The diode is connected across the motor terminals, with its polarity arranged to remain reverse-biased during normal motor operation.
+The AO3400A was selected as a compact N-channel MOSFET suitable for low-side switching. Its low on-state resistance at a gate-source voltage of 2.5 V supports operation with the ESP32-C3's 3.3 V control signals. The selection must also account for the motors' operating and startup currents to ensure that the MOSFETs remain within their electrical and thermal limits.
 
-The motors are connected to the driver through the `M_out1` and `M_out2` terminals. The same driver topology is replicated for the three vibration motors, with each MOSFET controlled independently by its corresponding microcontroller GPIO. This allows the firmware to activate and regulate each motor separately.
+Each motor driver also includes a 100 nF capacitor (`C3`, `C5`, or `C4`) connected across the motor terminals to help suppress high-frequency electrical noise. Schottky diodes (`D5`, `D6`, and `D4`) are connected in parallel with the motors to provide a path for the inductive current when the MOSFETs switch off. This helps limit voltage spikes and protects the switching transistors.
+
+The three vibration motors can therefore be controlled independently through their respective driver circuits and MCU GPIOs. The servomotor is connected separately through its 3-pin header, which provides its control signal, power supply, and ground connections.
 
 ##### 3.3.1.5 `Status LED Interface`  
 
-<!--[Insert zoomed-in schematic of the circuit]-->
+The system comprises two status LEDs: a yellow LED for temperature monitoring and a blue LED for BLE connection status. Both LEDs are connected to the PCB through a 4-pin header and are controlled by the MCU via the `LEDTemp` and `LEDBLE` signals, connected to `GPIO5` and `GPIO6`, respectively.
 
-Describe the status LED interface and its role in providing visual feedback on the system state. Explain the function of the associated components, including any current-limiting resistors, and justify their selection based on the LED specifications and required operating current.
+<p align="center">
+  <img src="images/schematic_LEDs.png" width="500">
+</p>
+<p align="center">
+  <em>Figure 6: Schematic of the LED connector.</em>
+</p>
+
+The selected LEDs are the C566E-AFF-CV0X0252 (yellow) and C566E-BFF-CU14Q3S2 (blue), manufactured by Cree LED. Each LED is connected to the MCU through a 100 Ω series resistor (`R15` and `R13`, respectively), which limits the current flowing through the LED. The resistor values were selected based on the LEDs' operating current requirements.
 
 #### 3.3.2 `Firmware`
 add code diagram, why we are using thresholds, bluetooth receiving, explain code generally.
