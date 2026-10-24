@@ -493,7 +493,6 @@ Score scale :
 | Battery capacity/performance | 5 | 5 |
 | Size | 4 | 5 |
 | Cost | 3 | 4 |
-|---|---|---|
 |Total Score| 67 | max score : 85 | 
 
 #### `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` 
@@ -516,7 +515,6 @@ Score scale :
 | Battery capacity/performance | 5 | 5 |
 | Size | 4 | 3 |
 | Cost | 3 | 4 |
-|---|---|---|
 |Total Score| 74 | max score : 85 | 
 
 ### 4.1.2 Trade-off summary
@@ -571,7 +569,6 @@ Score scale :
 | Reliability | 5 | 3 |
 | Size | 4 | 4 |
 | Cost | 3 | 4 |
-|---|---|---|
 |Total Score| 63 | max score : 85 | 
 
 #### `FSR 400 force-sensitive resistor`
@@ -597,7 +594,6 @@ Score scale :
 | Reliability | 5 | 3 |
 | Size | 4 | 5 |
 | Cost | 3 | 4 |
-|---|---|---|
 |Total Score| 67 | max score : 85 | 
 
 ### 4.2.2 Trade-off summary
@@ -652,7 +648,6 @@ Score scale :
 | Response and controllability | 5 | 5 |
 | Size | 4 | 4 |
 | Cost | 3 | 2 |
-|---|---|---|
 |Total Score| 67 | max score : 85 | 
 
 #### `Eccentric Rotating Mass (ERM)`
@@ -678,7 +673,6 @@ Score scale :
 | Response and controllability | 5 | 4 |
 | Size | 4 | 5 |
 | Cost | 3 | 5 |
-|---|---|---|
 |Total Score| 70 | max score : 85 | 
 
 ### 4.3.2 Trade-off summary
@@ -712,7 +706,7 @@ Score scale :
 
 #### `Rice Haptic Rocker`
 
-- **Description**: The Rice Haptic Rocker is a one-degree-of-freedom skin-stretch haptic device designed to communicate hand-closure information to the user through movement of the skin. It consists of a frame, strap, rocker, and a digital servo motor. The servo rotates the rocker, producing a tangential displacement of the skin. In the paper Skin Stretch Haptic Feedback to Convey Closure Information in Anthropomorphic, Under-Actuated Upper Limb Soft Prostheses, the device has a total weight of approximately 60 g, a maximum rocker rotation of 60°, and a maximum skin displacement of approximately 10.5 mm. Hand-closure measurements are mapped to commanded servo angles.
+- **Description**: The Rice Haptic Rocker is a one-degree-of-freedom skin-stretch haptic device designed to communicate hand-closure information to the user through movement of the skin. It consists of a frame, strap, rocker, and a digital servo motor. The servo rotates the rocker, producing a tangential displacement of the skin. In the paper [Skin Stretch Haptic Feedback to Convey Closure Information in Anthropomorphic, Under-Actuated Upper Limb Soft Prostheses](https://drive.google.com/file/d/1yu5s2M3uDlnRGCOeR8_xC_lUjv0Z2Gy0/view?usp=sharing), the device has a total weight of approximately 60 g, a maximum rocker rotation of 60°, and a maximum skin displacement of approximately 10.5 mm. Hand-closure measurements are mapped to commanded servo angles.
 - **Pros**:
   * Provides directional skin-stretch feedback.
   * Servo-controlled rocker movement enables a defined relationship between the measured hand movement and the haptic output.
@@ -731,7 +725,6 @@ Score scale :
 | Sensitivity and movement control | 5 | 5 |
 | Implementation complexity | 4 | 3 |
 | Size and bulkiness | 4 | 3 |
-|---|---|---|
 |Total Score| 52 | max score : 65 | 
 
 #### `Linear mechanism`
@@ -754,7 +747,6 @@ Score scale :
 | Sensitivity and movement control | 5 | 5 |
 | Implementation complexity | 4 | 4 |
 | Size and bulkiness | 4 | 4 |
-|---|---|---|
 |Total Score| 57 | max score : 65 | 
 
 ### 4.3.2 Trade-off summary
@@ -812,7 +804,6 @@ Score scale :
 | Reliability | 5 | 4|
 | Flexibility | 3 | 2|
 | Cost and complexity | 3 | 4|
-|---|---|---|
 |Total Score| 71 | max score : 100 | 
 
 #### `Wireless communication`
@@ -840,7 +831,6 @@ Score scale :
 | Reliability | 5 | 3|
 | Flexibility | 3 | 5|
 | Cost and complexity | 3 | 4|
-|---|---|---|
 |Total Score| 77 | max score : 100 | 
 
 ### 4.3.2 Trade-off summary
