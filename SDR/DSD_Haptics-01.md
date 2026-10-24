@@ -252,11 +252,9 @@ stages. Include entry and exit conditions and what is active in each. -->
 
 #### 3.3.1 `Electronics circuits`
 
-This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, microcontroller, motor drivers, temperature monitoring, and status LED interfaces into a single board.
+This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, microcontroller, motor drivers, temperature monitoring, and status LED interfaces into a single 2-layers board (36x45 mm).
 
-<!--[Insert annotated image of the complete PCB layout]-->
-
-Figure XX. PCB layout of the latest system iteration, highlighting the main functional blocks.
+![PCB layout of the latest system iteration, highlighting the main functional blocks.](images/PCB_with_labels.png.png)
 
 ###### 3.3.1.1 `Battery Connection and Temperature`
 
