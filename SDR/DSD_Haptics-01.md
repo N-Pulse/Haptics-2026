@@ -223,11 +223,11 @@ This section describes the electronic circuit design of the latest PCB iteration
   <img src="images/PCB_with_labels.png" width="500">
 </p>
 <p align="center">
-  <em>Figure 1: PCB layout of the latest system iteration, highlighting the main functional blocks.</em>
+  <em>Figure 1: PCB layout of the latest system iteration, highlighting the main functional blocks. In light blue: the battery connection and temperature monitoring circuit; in purple: the power supply circuits; in red: the MCU; in orange: the motor drivers and motor connections; in pink: the LEDs interface.  </em>
 </p>
 
 
-###### 3.3.1.1 `Battery Connection and Temperature`
+###### 3.3.1.1 `Battery Connection and Temperature Monitoring`
 
 The battery interface provides the electrical connection between the battery and the PCB, enables manual system power via a rocker switch, and supports battery temperature monitoring to improve system safety.
 
