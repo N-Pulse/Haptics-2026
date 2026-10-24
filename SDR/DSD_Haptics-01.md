@@ -412,7 +412,7 @@ Structure :
 The flexion feedback module is 60mm high, 60mm wide and 21mm thick and consists of five parts :
 * The main body : It includes a hole on each side for the straps to pass through, has un hole for the rail and a place for the servo.
 * The rail : It consists of two parts: the top, which features teeth, and the bottom, which has a 5mm bump. These two parts are held together by two guides on the top piece and a pin at each end of the rail.
-* The servo : It goes in the place in the main body of the module and is coonected to the gear.
+* The servo : It goes in the place in the main body of the module and is connected to the gear.
 * The gear : It forms the connection between the servo and the rail.
 * The cap : It enclose the servo and allows the cables to pass through via a small hole on the side.
 [Flexion feedback assembly](https://drive.google.com/file/d/1da2Mox3atejDgfT-ykYJN5pDtji0LcrP/view?usp=drive_link)
@@ -688,8 +688,81 @@ Score scale :
 | Linear resonant actuator (LRA) | 67 | No | Better potential response and control, but higher system cost and additional driver requirements. |
 | Eccentric Rotating Mass (ERM) | 70 | Yes | Low cost, compact dimensions, simple integration, and adequate initial haptic feedback.|
 
+### 4.3 Servomotor mechanism selection
 
-4.4 servo+mechanism
+The trade-off method used was based on the following criteria : 
+- `Sensitivity and control`
+- `Implementation complexity`
+- `Size and bulkiness`
+
+| Criterion | Weight (1 - 5) | Rationale for weight |
+|---|---|---|
+| Sensitivity and control | 5 | The mechanism shall produce controlled and perceptible movements in response to changes in the input signal of wrist flexion and extension. The selected mechanism should provide sufficiently repeatable movement to allow different feedback levels to be distinguished by the user.|
+| Implementation complexity | 4 |The mechanism should consider the number of mechanical components and its design, assembly, and control requirements.|
+| Size and bulkiness | 4 |The system should be wearable and comfortable during daily use, considering dimensions and weight. |
+
+Score scale : 
+> [1] : Does not meet any requirements
+> [2] : Meets some requirements 
+> [3] : Meets all minimum requirements 'Shall' requirements
+> [4] : Meets all minimum requirements and 'should'
+> [5] : Meets all requirements, 'Shall, should & may'
+
+### 4.3.1 Traded-off design choices
+
+#### `Rice Haptic Rocker`
+
+- **Description**: The Rice Haptic Rocker is a one-degree-of-freedom skin-stretch haptic device designed to communicate hand-closure information to the user through movement of the skin. It consists of a frame, strap, rocker, and a digital servo motor. The servo rotates the rocker, producing a tangential displacement of the skin. In the paper Skin Stretch Haptic Feedback to Convey Closure Information in Anthropomorphic, Under-Actuated Upper Limb Soft Prostheses, the device has a total weight of approximately 60 g, a maximum rocker rotation of 60°, and a maximum skin displacement of approximately 10.5 mm. Hand-closure measurements are mapped to commanded servo angles.
+- **Pros**:
+  * Provides directional skin-stretch feedback.
+  * Servo-controlled rocker movement enables a defined relationship between the measured hand movement and the haptic output.
+  * Demonstrated in research as a way to convey proprioceptive information about prosthetic hand closure.
+  * Uses a relatively simple mechanical arrangement consisting of a frame, strap, rocker, and servo.
+ 
+- **Cons**:
+  * Requires direct mechanical contact with the skin and appropriate positioning to generate a perceptible skin-stretch sensation.
+  * The rocker and its supporting frame occupy space and must be securely attached to the user's arm.
+  * Mechanical alignment and strap tension can affect the quality and consistency of the feedback.
+  * The reported device weighs approximately 60 g, which may be a consideration when designing a lightweight wearable bracelet.
+  * Its mechanical movement may require more space and assembly than a simpler actuator arrangement.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity and movement control | 5 | 5 |
+| Implementation complexity | 4 | 3 |
+| Size and bulkiness | 4 | 3 |
+|---|---|---|
+|Total Score| 52 | max score : 65 | 
+
+#### `Linear mechanism`
+
+- **Description**: A linear servomotor mechanism produces controlled linear displacement to provide haptic feedback through contact with the user's skin. It consists of a gear moving a rail that has a 5mm bump facing the arm, so with each angle rotation, the bump will move linearly and the user will know the direction of the movement. The actuator rotation is mapped to the mechanism position, allowing changes in hand movement to be represented by moving the bump to different positions.
+- **Pros**:
+  * Direct linear movement may simplify the mechanical interface when the required feedback is a push or displacement against the skin.
+  * Position control can provide repeatable movement levels corresponding to different sensor thresholds.
+  * May be integrated into a compact bracelet if the actuator has sufficiently small dimensions and suitable travel.
+ 
+- **Cons**:
+  * The achievable feedback force and travel depend on the selected actuator and must be verified experimentally.
+  * A linear actuator may still require a support structure and skin-contact surface to provide stable feedback.
+  * Its dimensions and weight may be greater than expected if sufficient force or travel is required.
+  * Mechanical friction, backlash, and positioning accuracy can affect the consistency of the feedback.
+  * Integration requires mechanical design, mounting, and calibration to ensure that the movement is perceptible and comfortable.
+
+| Criterion | Weight (1-5) | score (1-5) |
+|---|---|---|
+| Sensitivity and movement control | 5 | 5 |
+| Implementation complexity | 4 | 4 |
+| Size and bulkiness | 4 | 4 |
+|---|---|---|
+|Total Score| 57 | max score : 65 | 
+
+### 4.3.2 Trade-off summary
+
+| Option | Score | Retained | Key reason |
+|---|---|---|---|
+| Rice Haptic Rocker | 52 | No | Provides a research-demonstrated skin-stretch feedback method, but its rocker, frame, and strap may make integration into the intended bracelet less straightforward. |
+| Linear mechanism | 57 | Yes | Offers direct linear displacement and may simplify the mechanical interface for the intended bracelet, but still needs verification of feedback perceptibility.|
 
 ### 4.5 Communication selection
 
