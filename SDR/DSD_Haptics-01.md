@@ -373,7 +373,10 @@ flowchart LR
 ##### General code architecture
 The firmware is split into two independent Arduino sketches, one running on each board, with each sketch itself broken into multiple tabs.
 
-On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the three sensors (pressure sensors) through analogRead(). These three values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy in pack every 5-10 ms (TBD).
+On the hand side, the sender sketch (BLE_sender.ino) runs a loop that, every cycle, reads the three sensors (pressure sensors) through analogRead(). These three values are packed into a small array and are then converted into bytes (16 bytes). The array is sent out over Bluetooth Low Energy in pack every 5-10 ms (TBD). In addition to the pressure and flexion values already sent, the sender will also transmit motor/servo position data, which the receiver will use to directly control the servo’s position, rather than deriving it only from the flexion sensor as currently implemented.
+Each packet will include a header containing a packet number (to detect and count dropped packets) followed by the sensor data, with the header specifying how many bytes are allocated to the pressure values and how many to the wrist/flexion position value. This allows the receiver to detect when a packet goes missing, not just whether the connection currently exists. 
+
+
 
 On the arm side, the receiver sketch (BLE_receiver.ino) acts as the BLE client: it connects to the sender, awaits for incoming data, and unpacks it back into values. Each value is applied updateFilter() to smooth out raw readings. Then each filtered value passes through pressureThreshold() or flexionThreshold() to clamp it into a known, safe range. Each pressure value is sent to its corresponding vibration motor, and the flexion value is converted into an angle for the servomotor, using the mapping functions in (mapping.ino). Separately from this Bluetooth data flow, the receiver also reads a thermistor connected directly to the board, calculates the actual temperature, and lights an LED if that temperature crosses an established safety threshold. Another LED lights up when the receiver and the sender are connected via BLE and turns off when the two boards lose their link. 
 
