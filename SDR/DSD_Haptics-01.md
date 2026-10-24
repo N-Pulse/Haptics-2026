@@ -7,15 +7,6 @@
 > **Last modified:** `2026-10-17`
 > **Repository path:** `Haptics-2026/SDR/DSD_Haptics-01.md`
 
-
-HOW TO USE THIS TEMPLATE
-- Replace every `<placeholder>`. Delete guidance comments before review.
-- One DSD per subsystem or module
-- The DSD must stand alone: a reviewer should be able to judge the design
-  from this document, the linked requirements, and the linked evidence.
-- Normative language: "shall" = requirement, "should" = recommendation,
-  "may" = optional.
-
 ---
 
 ## Document control
