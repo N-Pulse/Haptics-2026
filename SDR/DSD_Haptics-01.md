@@ -59,11 +59,6 @@ HOW TO USE THIS TEMPLATE
 
 ### 1.1 Purpose and scope
 
-<!-- Why does this document exist, at which review/milestone is it produced,
-and what decision does it support? State what is IN and OUT of scope. 
-
-DO NOT CHANGE ANYTHING IN THIS SECTION EXCEPT THE HIGHLIGHTED SECTIONS -->
-
 This Design Solution Definition (DSD) is at a `Proof of concept` stage
 validated on `<date>`. It justifies the concept selected for `Haptics`.
 
@@ -77,9 +72,6 @@ It covers:
 **Out of scope:** `Not relevant.`
 
 ### 1.2 Responsibility and change authority
-
-<!-- Who owns this document? Who may approve changes? How are changes
-proposed (issue, RFC, pull request)? -->
 
 - **Document owner:** `Ana Benavente / Haptics` <!-- Who is responsible to keep this document up to date ? --> 
 - **Change authority:** `Team Leader / N-Pulse` <!-- What is the role/responsibility of the person -->
@@ -98,9 +90,6 @@ proposed (issue, RFC, pull request)? -->
 | `PWM` | `Pulse Width Modulation` |
 
 ## 2. Requirements and traceability
-
-<!-- Do not duplicate the full requirements document. Link to it and list only
-the requirements this design directly addresses. -->
 
 | Requirement ID | Verification method | Status |
 |---|---|---|
@@ -148,19 +137,9 @@ the requirements this design directly addresses. -->
 
 ## 3. Concept justification
 
-`<Explain HOW the design addresses the technical problem it's trying to solve. Every major element should trace back to a need or requirement>`
-
-<span style="color: red;">The following chapters and sub-chapters are an example. Tailor them to be the most relevant to your own system.</span>
-
-
 ### 3.1 Solution overview
 
 `The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis finger tips into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration of different intensities, so the user can feel contact without looking at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.`
-
-
-<!-- Mermaid renders natively on GitHub. Alternatively link an image from
-`docs/figures/`. Include interfaces: data, mechanical, electrical,
-biological/sample flow, and user interaction. -->
 
 
 ```mermaid
@@ -196,9 +175,6 @@ flowchart LR
 
 
 ### 3.2 Main design choices
-
-<!-- One subsection per significant choice. Use this pattern:
-Decision · Rationale · Requirements addressed · Consequences. -->
 
 #### 3.2.1 `Battery and power system`
 
@@ -237,9 +213,6 @@ Decision · Rationale · Requirements addressed · Consequences. -->
 
 
 #### 3.2.6 Operating modes
-
-<!-- For instruments: operating modes. For protocols and pipelines: workflow
-stages. Include entry and exit conditions and what is active in each. -->
 
 | Mode / Stage | Purpose | Entry condition | Exit condition | Active components |
 |---|---|---|---|---|
@@ -441,13 +414,6 @@ The battery/board module measures 77.7 mm in height, 59 mm in width, and 36 mm i
 ---
 
 ## 4. Traded-off concepts
-
-<!-- Show your work. This section protects the project from re-litigating
-decisions and records why alternatives were rejected. -->
-
-`<This is the most important part of this document. Please fill it in with great attention. >`
-
-`<The goal of this section is to go over every other solution you found relevant but that you chose not to pursue.>`
 
 ### 4.1 Battery selection
 
