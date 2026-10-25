@@ -222,7 +222,7 @@ flowchart LR
 
 #### 3.3.1 `Electronics circuits`
 
-This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, MCU, motor drivers, temperature monitoring, and status LED interfaces into a single 2-layers board (36x45 mm) with 4 M2 mounting holes.
+This section describes the electronic circuit design of the latest PCB iteration. The PCB integrates the power supply, MCU, motor drivers, temperature monitoring, and status LED interfaces into a single 2-layer board (36x45 mm) with 4 M1 mounting holes.
 
 <p align="center">
   <img src="images/PCB_with_labels.png" width="500">
@@ -262,7 +262,7 @@ The manual power switch and temperature monitoring circuit therefore provide use
 
 ##### 3.3.1.2 `Power Supply: 5 V and 3.3 V Rails`
 
-The power supply consists of two DC–DC buck converters that convert the battery voltage into regulated 5 V and 3.3 V supply rails. The 5 V rail powers the servomotor, while the 3.3 V rail supplies the MCU and the three vibration motor drivers. Using two converters allows each part of the system to receive the voltage it requires.
+The power supply consists of two DC–DC buck converters that convert the battery voltage into regulated 5 V and 3.3 V supply rails. The 5 V rail powers the servomotor, while the 3.3 V rail supplies the MCU and the three vibration motor drivers.
 
 <p align="center">
   <img src="images/schematic_powerboards.png" width="500">
@@ -285,7 +285,7 @@ The battery connector `J4` was positioned near the power supply circuits. The tw
 
 ##### 3.3.1.3 `Microcontroller`
 
-The MCU used in the system is the ESP32-C3 SuperMini, which coordinates the operation of the servomotor and the three vibration motors based on pressure data received from the prosthesis main board. It communicates with the main board via BLE and generates PWM signals to control motor actuation. The microcontroller also controls two status LEDs, which indicate the temperature-monitoring and BLE communication status.
+The MCU used in the system is the ESP32-C3 Super Mini, which coordinates the operation of the servomotor and the three vibration motors based on pressure data received from the prosthesis main board. It communicates with the main board via BLE and generates PWM signals to control motor actuation. The microcontroller also controls two status LEDs, which indicate the temperature-monitoring and BLE communication status.
 
 <p align="center">
   <img src="images/schematic_MCU.png" width="500">
@@ -302,7 +302,7 @@ The pressure data received via BLE from the prosthesis main board are processed 
 
 The ESP32-C3 is powered by the regulated 3.3 V rail and connected to the common ground. `GPIO8`, `GPIO9`, `GPIO20`, `GPIO4`, and `GPIO2` are left unconnected in the current design because they are not required for the implemented functionality. 
 
-The ESP32-C3 SuperMini is mounted on the PCB using through-hole pin headers.
+The ESP32-C3 Super Mini is mounted on the PCB using through-hole pin headers.
 
 ##### 3.3.1.4 `Transistor-Based Motor Drivers and Motor Connectors`  
 <a id="motor-drivers"></a>
@@ -319,7 +319,7 @@ A separate 3-pin header connects the servomotor to the PCB. Its pins provide the
   <em>Figure 5: Schematic of the three vibration motor drivers and the connectors for the vibration motors and servomotor.</em>
 </p>
 
-The switching components (`Q1`, `Q2`, and `Q3`) are AO3400A N-channel MOSFETs manufactured by Alpha & Omega Semiconductor Inc. Their sources are connected to ground, while their drains are connected to the respective motor terminals (`M1out2`, `M2out2`, and `M3out2`). The other motor terminals (`M1out1`, `M2out1`, and `M3out1`) are connected to the regulated 3.3 V rail. When a MOSFET is switched on, current flows from the 3.3 V supply through the corresponding motor and MOSFET to ground, activating the motor. When the MOSFET is switched off, the supply current is interrupted. By driving the MOSFETs with PWM signals, the MCU adjusts the effective power delivered to each motor by varying the duty cycle.
+The switching components (`Q1`, `Q2`, and `Q3`) are AO3400A N-channel MOSFETs. Their sources are connected to ground, while their drains are connected to the respective motor terminals (`M1out2`, `M2out2`, and `M3out2`). The other motor terminals (`M1out1`, `M2out1`, and `M3out1`) are connected to the regulated 3.3 V rail. When a MOSFET is switched on, current flows from the 3.3 V supply through the corresponding motor and MOSFET to ground, activating the motor. When the MOSFET is switched off, the supply current is interrupted. By driving the MOSFETs with PWM signals, the MCU adjusts the effective power delivered to each motor by varying the duty cycle.
 
 The MOSFET gates are controlled by the MCU signals `M1in`, `M2in`, and `M3in` through the 220 Ω series resistors `R8`, `R12`, and `R10`, respectively. These resistors limit the transient current required to charge and discharge the MOSFET gate capacitances during switching. The 10 kΩ pull-down resistors (`R7`, `R11`, and `R9`) connect the gates to ground, ensuring that the MOSFETs remain off when the corresponding control signals are low or not actively driven.
 
@@ -391,11 +391,9 @@ Finally, the resulting values are mapped to the permitted output range of the vi
 The two boards communicate using a client–server BLE architecture. The hand-side board, currently tested on an ESP32-S3, acts as the server by creating a BLE service and characteristic and advertising its availability, while the arm-side ESP32-C3 acts as the client and actively connects to the server using its known address. Approximately every 10 milliseconds, the client reads the characteristic to retrieve the latest sensor data. The communication uses raw bytes rather than explicitly typed values: the sender converts an array of three integers into a byte sequence using a pointer cast (`(uint8_t*)packet`), and the receiver uses `memcpy()` to reconstruct the original four integers. Before processing the received data, the client verifies that the payload length matches the expected size (`value.length() == sizeof(int) * 4`), preventing malformed or incomplete packets from being interpreted as valid sensor readings.
 
 #### 3.3.3 `Mechanics`
-General structure of the bracelet : 
 The bracelet consists of three parts: the component for finger-pressure feedback, the component for wrist-flexion feedback, and the battery/circuit board section. Finally these parts are all connected by a Velcro strip to fit the arm. 
 
-##### The pressure feedback : 
-Structure : 
+##### The pressure feedback 
 The pressure feedback component consists of three identical modules for providing feedback to the thumb, index finger, and middle finger. Each of these modules measures 32 mm in height, 26 mm in width, and 5 mm in thickness, and consists of three parts:
 * The main body : It includes a hole on each side for the straps to pass through and has a cavity in the center to house the vibrator.
 * The vibrator : It goes in the cavity in the main body of the module.
@@ -404,30 +402,26 @@ The pressure feedback component consists of three identical modules for providin
 [Pressure feedback CADs](https://drive.google.com/drive/folders/1Q9jedtYQnt1176AdBbXqwLDbgV0Av4K-?usp=drive_link)
 
 
-##### The flexion feedback : 
-Structure :
+##### The flexion feedback
 The flexion feedback module is 60mm high, 60mm wide and 21mm thick and consists of five parts :
-* The main body : It includes a hole on each side for the straps to pass through, has un hole for the rail and a place for the servo.
-* The rail : It consists of two parts: the top, which features teeth, and the bottom, which has a 5mm bump. These two parts are held together by two guides on the top piece and a pin at each end of the rail.
-* The servo : It goes in the place in the main body of the module and is connected to the gear.
-* The gear : It forms the connection between the servo and the rail.
-* The cap : It enclose the servo and allows the cables to pass through via a small hole on the side.
+* The main body: It includes a hole on each side for the straps to pass through, has a hole for the rail and a place for the servo.
+* The rail: It consists of two parts: the top, which features teeth, and the bottom, which has a 5mm bump. These two parts are held together by two guides on the top piece and a pin at each end of the rail.
+* The servo: It goes in the place in the main body of the module and is connected to the gear.
+* The gear: It forms the connection between the servo and the rail.
+* The cap: It enclose the servo and allows the cables to pass through via a small hole on the side.
 [Flexion feedback assembly](https://drive.google.com/file/d/1da2Mox3atejDgfT-ykYJN5pDtji0LcrP/view?usp=drive_link)
 [Flexion feedback Cads](https://drive.google.com/drive/folders/18fYBH1grhHKaJqEiLSD7rRKpASQkbYJC?usp=drive_link)
-
-How it works :
 When the servo activates, it drives the gear, which in turn moves the rail in a linear motion that the user can feel due to the bump.
 
 
-##### The battery/board pack : (It will need to be adjusted once we have received the battery and the board)
-Structure :
+##### The battery/board pack (It will need to be adjusted once we have received the battery and the board)
 The battery/board module measures 77.7 mm in height, 59 mm in width, and 36 mm in thickness, and consists of six components that fit into one another and are secured by pins:
-* The main body : It includes a hole on each side for the straps to pass through and a place to put the first stage and the battery.
-* The first stage : It is the main part that hold the battery. It is separate from the main body because printing both together would be too complicated due to floating regions.
-* The battery : She's in the first stage and is held in place by the second stage.
-* The second stage : It the part that holds the board and closes the battery section. It is separated from the main body for the same reasons as in the first stage.
-* The board : She's in the second stage and is screwed to it.
-* The cap : It encloses the board and features 2 holes for passing through two LEDs.
+* The main body: It includes a hole on each side for the straps to pass through and a place to put the first stage and the battery.
+* The first stage: It is the main part that hold the battery. It is separate from the main body because printing both together would be too complicated due to floating regions.
+* The battery: She's in the first stage and is held in place by the second stage.
+* The second stage: It the part that holds the board and closes the battery section. It is separated from the main body for the same reasons as in the first stage.
+* The board: She's in the second stage and is screwed to it.
+* The cap: It encloses the board and features 2 holes for passing through two LEDs.
 [Battery/board assembly](https://drive.google.com/file/d/13KTVKjT1o8PBZH2u7Te5b1pqeQ4y3S1g/view?usp=drive_link)
 [Battery/board CADs](https://drive.google.com/drive/folders/1uHSiRIowJNreikrxuMxqF4VdFK1-pneW?usp=drive_link)
 
@@ -463,19 +457,18 @@ Score scale :
 
 ### 4.1.1 Traded-off design choices
 
-#### `Li-Po battery`
+#### `7.4V Li-Po battery 3400mAh`
 
 - **Description**: A lithium-polymer (Li-Po) rechargeable battery is considered as a compact power source for the wearable haptic system. The selected battery must provide a nominal voltage compatible with the power-management circuitry, a capacity of at least 3000 mAh, and sufficient energy to support approximately four hours of operation.
 - **Pros**:
   * High energy density, allowing a compact and lightweight design.
-  * Flexible form factors that can facilitate integration into a wearable device.
+  * Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
   * High discharge capability, depending on the selected battery specification.
   * Potential for improved user comfort due to reduced weight and compact dimensions.
 - **Cons**:
   * Vulnerable to physical damage, punctures, and deformation, which may cause internal short circuits or thermal runaway.
   * Requires suitable charging, over-discharge, overcurrent, and temperature protection.
   * A protective enclosure is necessary to reduce the risk of damage from accidental drops and mechanical impacts.
-  * The final cost depends on the required capacity, discharge rating, protection circuitry, and order quantity.
 
 | Criterion | Weight (1-5) | score (1-5) |
 |---|---|---|
@@ -487,15 +480,14 @@ Score scale :
 
 #### `2S1P 7.4V battery pack NCR18650B li-ion 3400mAh` 
 
-- **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. The pack is intended to supply the wearable system for approximately four hours, subject to actual power consumption and conversion losses. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
+- **Description**: This alternative consists of two lithium-ion 18650 cells connected in series (2S1P), providing a nominal pack voltage of approximately 7.2–7.4 V and a capacity of 3400 mAh. A suitable battery-management system (BMS), protective enclosure, and compatible charging circuit are required.
 - **Pros**:
   * Capacity of 3400 mAh, exceeding the minimum requirement of 3000 mAh.
   * Nominal voltage compatible with a system designed for a 2-cell lithium-ion pack, subject to voltage regulation.
   * Standard cylindrical cells can be integrated into a rigid protective enclosure.
   * Potentially good availability and cost-effectiveness, depending on the supplier and pack configuration.
 - **Cons**:
-  * Larger and potentially heavier than a comparable Li-Po battery, which may reduce wearable comfort.
-  * Requires a suitable 2S BMS, cell balancing, and a charger compatible with the pack's full-charge voltage.
+  * Not very compact, which may reduce wearable comfort.
   * The enclosure must protect the cells from impacts, crushing, and other mechanical damage
   * The additional weight and volume may constrain the mechanical design and placement of the battery.
 
@@ -540,12 +532,11 @@ Score scale :
 
 #### `FSR 402 force-sensitive resistor`
 
-- **Description**: The FSR 402 is another force-sensitive resistive sensor that can detect applied pressure and provide an analog signal to the microcontroller. It offers a larger sensing area than the FSR 400, making it a potential alternative where the mechanical contact area is larger or pressure distribution is less localized.
+- **Description**: The FSR 402 is a force-sensitive resistive sensor that can detect applied pressure and provide an analog signal to the microcontroller. It offers a sensing area of 13 mm, suitable for when needed contact area is larger or pressure distribution is less localized.
 - **Pros**:
   * Larger active sensing area may facilitate integration with wider contact surfaces.
   * Simple analog interfacing with a microcontroller.
   * Suitable for detecting relative changes in applied force.
-  * Similar operating principle to the FSR 400, allowing a comparable signal-processing approach.
  
 - **Cons**:
   * Larger sensing area may limit integration in confined spaces.
@@ -563,7 +554,7 @@ Score scale :
 
 #### `FSR 400 force-sensitive resistor`
 
-- **Description**: The FSR 400 is a thin force-sensitive resistive sensor that changes its electrical resistance in response to an applied force. It can be integrated into the prosthesis to detect contact pressure and provide input for the haptic feedback system. Its analog output can be read by the microcontroller through an ADC and processed using filtering, thresholding, and mapping algorithms to control vibration intensity.
+- **Description**: The FSR 400 is a thin force-sensitive resistive sensor that changes its electrical resistance in response to an applied force. Its sensing area of 5 mm can be integrated into the prosthesis to detect contact pressure and provide input for the haptic feedback system. Its analog output can be read by the microcontroller through an ADC and processed using filtering, thresholding, and mapping algorithms to control vibration intensity.
 - **Pros**:
   * Compact and thin design, suitable for integration into a wearable prosthesis.
   * Simple analog interface that can be implemented using a voltage divider and a microcontroller ADC.
@@ -603,7 +594,7 @@ The trade-off method used was based on the following criteria :
 
 | Criterion | Weight (1 - 5) | Rationale for weight |
 |---|---|---|
-| Vibration intensity | 5 | The motor shall produce clearly perceptible sensations that allow the user to distinguish between different pressure levels detected by the FSR sensors. Insufficient vibration intensity would reduce the effectiveness of the haptic feedback system.|
+| Vibration intensity | 5 | The motor shall produce clearly perceptible sensations that allow the user to distinguish between different pressure levels detected by the FSR 400 sensors. Insufficient vibration intensity would reduce the effectiveness of the haptic feedback system.|
 | Response and controllability | 5 | The motor shall respond quickly to changes in the sensor readings and support controllable vibration intensity through PWM. This is essential for translating pressure variations into distinguishable haptic feedback. |
 | Size | 4 | The motor should be compact and lightweight enough to integrate into the prosthesis, particularly near the contact points, without compromising mechanical integration or comfort. |
 | Cost | 3 | The motor should fit within the project's budget. Since components are purchased in small quantities, unit prices may be higher than those available through bulk purchasing. |
