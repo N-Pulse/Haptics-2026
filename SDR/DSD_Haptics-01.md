@@ -77,9 +77,11 @@ It covers:
 | Term | Definition |
 |---|---|
 | `BLE` | `Bluetooth Low Energy` |
+| `ERM` | `Eccentric Rotator Mass` |
 | `GND` | `Ground` |
 | `IC`  | `Integrated Circuit` |
 | `LED` | `Light-Emitting Diode` |
+| `LRA` | `Linear Resonant Actuator` |
 | `MCU` | `Microcontroller Unit` |
 | `NTC` | `Negative Temperature Coefficient` |
 | `PCB` | `Printed Circuit Board` |
@@ -633,7 +635,7 @@ Score scale :
 
 #### `Eccentric Rotating Mass (ERM)`
 
-- **Description**: These compact motors generate mechanical vibrations when supplied with electrical power. Their intensity can be adjusted by controlling the PWM duty cycle, allowing the system to associate different vibration levels with different pressure thresholds measured by the FSR sensors.
+- **Description**: These compact motors generate mechanical vibrations when supplied with electrical power. Their intensity can be adjusted by controlling the PWM duty cycle, allowing the system to associate different vibration levels with different pressure thresholds measured by the FSR 400 sensors.
 - **Pros**:
   * Compact and lightweight, making them suitable for integration into a wearable haptic bracelet.
   * Low operating voltage, compatible with suitable 3 V power and driver circuitry.
