@@ -29,6 +29,10 @@
 | Version | Date | Author(s) | Main changes | PR / Commit |
 |---|---|---|---|---|
 | 0.1.0 | 2026-10-17 | Ana Benavente | First version | |
+| 0.1.0 | 2026-10-25 | Jean Castelier | Updated mechanics | |
+| 0.1.0 | 2026-10-25 | Giuliana Dellios | Updated firmware | |
+| 0.1.0 | 2026-10-25 | Camilla Varotto | Updated electronics | |
+
 
 ---
 
