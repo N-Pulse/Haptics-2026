@@ -78,12 +78,13 @@ It covers:
 |---|---|
 | `BLE` | `Bluetooth Low Energy` |
 | `GND` | `Ground` |
+| `IC`  | `Integrated Circuit` |
 | `LED` | `Light-Emitting Diode` |
 | `MCU` | `Microcontroller Unit` |
 | `NTC` | `Negative Temperature Coefficient` |
 | `PCB` | `Printed Circuit Board` |
 | `PWM` | `Pulse Width Modulation` |
-| `IC`  | `Integrated Circuit` |
+
 
 ## 2. Requirements and traceability
 
@@ -135,7 +136,7 @@ It covers:
 
 ### 3.1 Solution overview
 
-`The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis finger tips into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration of different intensities, so the user can feel contact without looking at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.`
+`The retained concept is a wearable bracelet that turns the contact pressure measured at the prosthesis finger tips into vibration on the user’s skin, addressing the problem of sensation feedback. Pressure readings are sent wirelessly to the bracelet, where an MCU converts them into vibration feedback of different intensities, so the user can feel the exerted force without having to look at the hand. Additionally, the prosthesis’s wrist extension and flexion, given by the motor position, are also sent to the bracelet, which reproduces this movement with a servomotor linear mechanism. The architecture was selected to meet all the requirements while keeping power consumption low, the device compact, and operation safe, comfortable and reliable for the user.`
 
 
 ```mermaid
@@ -174,8 +175,8 @@ flowchart LR
 
 #### 3.2.1 `Battery and power system`
 
-- **Decision:** `Power the bracelet using a 7.4 V 3400 mA 2S Li-Ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the thermistor.`
-- **Rationale:** `Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail, with a usage of minimum 4 hours.`
+- **Decision:** `Power the bracelet using a 7.4 V 3400 mA 2S Li-Ion pack through an on/off switch with 2 buck converters (3.3 and 5 V) as well as temperature control via the NTC thermistor.`
+- **Rationale:** `Prioritize battery and user safety, as well as efficient buck conversion for stable rails and have enough headroom for the 5V rail, for a battery life of minimum 4 hours.`
 - **Requirements addressed:** `HA-001, HA-011, SYS-034, SYS-019, SYS-020, SYS-018, SYS-010, SAF-008.`
 - **Consequences / limitations:** `Need of 2S protection board and charger, and visible warning of temperature as well as thermometer calibration.`
 
@@ -188,15 +189,15 @@ flowchart LR
 
 #### 3.2.3 `Pressure sensors and circuit`
 
-- **Decision:** `Use 5 (one per fingertip) resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range expected at the prosthesis.`
+- **Decision:** `Use 5 (one per fingertip) resistive force-sensing sensors (FSR 400) to transduce contact pressure into an analog signal, each read through a voltage divider with a fixed resistor (1 kΩ), chosen experimentally to maximize sensitivity over the force range in which haptic feedback is needed.`
 - **Rationale:** `Thin, low-cost, responsive to light contact, and low-power.`
 - **Requirements addressed:** `HA-004, HA-005, HA-006, HA-007, HA-008, HA-009, HA-010, SYS-028, SYS-021, SYS-011.`
-- **Consequences / limitations:** `Need of calibration, has a non-linear response, and a sensitivity trade-off for certain force ranges.`
+- **Consequences / limitations:** `Need of calibration, has a non-linear response, and a sensitivity trade-off fixed by the resistor for force ranges.`
 
 #### 3.2.4 `Vibration feedback`
 
-- **Decision:** `Render the pressure measured at 3 of the prosthesis finger tips sensors as vibration on the skin, using 3 vibration motors with intensity increasing with pressure.`
-- **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light. By only having 3 out of the 5 signals as outputs, the user gets enough pressure information without having to handle too much.`
+- **Decision:** `Render the pressure measured at 3 of the prosthesis finger tips sensors as vibration on the skin, using 3 vibration motors with intensity increasing along with sensed pressure.`
+- **Rationale:** `Direct way of reproducing sensation by stimulating tactile receptors intuitively and perceptively, using 3V vibration motors which are low-cost, low-power, and light. By only having 3 out of the 5 signals as outputs, the user gets enough pressure information without having to being overstimulated.`
 - **Requirements addressed:** `HA-002, HA-003, HA-004, HA-005, HA-006, HA-007, HA-008, SYS-031, SYS-028, SYS-021, SYS-011.`
 - **Consequences / limitations:** `Skin could adapt to continuous vibration, so sustained contact could become less noticeable over time, and intensity levels have a resolution trade-off, limited by latency.`
 
