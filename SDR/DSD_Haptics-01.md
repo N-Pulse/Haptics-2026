@@ -267,7 +267,7 @@ The manual power switch and temperature monitoring circuit therefore provide use
 The power supply consists of two DC–DC buck converters that convert the battery voltage into regulated 5 V and 3.3 V supply rails. The 5 V rail powers the servomotor, while the 3.3 V rail supplies the MCU and the three vibration motor drivers.
 
 <p align="center">
-  <img src="images/schematic_powerboards.png" width="500">
+  <img src="images/schematic_powerboards.png" width="200">
 </p>
 <p align="center">
   <em>Figure 3: Schematic of the two power supply circuits.</em>
