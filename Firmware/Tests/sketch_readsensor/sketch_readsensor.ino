@@ -1,12 +1,12 @@
 // Lectura de sensor de presión resistivo (FSR) mediante divisor de voltaje
 // Conexión: 
-//   5V (o 3.3V en STM32) -> Sensor FSR -> Pin analógico -> Resistencia fija (10kΩ) -> GND
+//   5V (o 3.3V en STM32) -> Sensor FSR -> Pin analógico -> Resistencia fija (1kΩ) -> GND
 
 const int pinSensor = A1;      // Pin analógico de lectura
 const int pinSensor2 = A0;      // Pin analógico de lectura
 
-const float voltajeRef = 5;  // 3.3 si usas STM32 (ajusta según tu placa)
-const int resolucionADC = 1023; // 1023 para Arduino (10 bits), 4095 para STM32 (12 bits)
+const float voltajeRef = 3.3;  // 3.3 si usas STM32 (ajusta según tu placa)
+const int resolucionADC = 4095; // 1023 para Arduino (10 bits), 4095 para STM32 (12 bits)
 const float resistenciaFija = 1000.0; // Valor de la resistencia del divisor (ohms)s
 
 void setup() {
