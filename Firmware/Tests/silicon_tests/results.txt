@@ -1,0 +1,243 @@
+Bare sensors on Ana's finger, force measured with scale, finger parallel to plane
+
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.075
+Voltage min (V): 0.000
+Voltage max (V): 0.103
+Voltage range (V): 0.103
+Voltage SD (V): 0.028
+Resistance mean (ohm): 76691.8
+Resistance min (ohm): 47714.3
+Resistance max (ohm): 1022000.0
+Resistance range (ohm): 974285.7
+Resistance SD (ohm): 76125.9
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.299
+Voltage min (V): 0.230
+Voltage max (V): 0.362
+Voltage range (V): 0.132
+Voltage SD (V): 0.024
+Resistance mean (ohm): 15824.8
+Resistance min (ohm): 12824.3
+Resistance max (ohm): 20766.0
+Resistance range (ohm): 7941.6
+Resistance SD (ohm): 1447.1
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 0.901
+Voltage min (V): 0.753
+Voltage max (V): 1.041
+Voltage range (V): 0.288
+Voltage SD (V): 0.065
+Resistance mean (ohm): 4577.8
+Resistance min (ohm): 3802.8
+Resistance max (ohm): 5642.9
+Resistance range (ohm): 1840.0
+Resistance SD (ohm): 416.2
+
+
+Sensor + silicon coating v1 on Ana's finger, force measured with scale, finger parallel to plane
+
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.004
+Voltage min (V): 0.000
+Voltage max (V): 0.088
+Voltage range (V): 0.088
+Voltage SD (V): 0.015
+Resistance mean (ohm): 105026.9
+Resistance min (ohm): 55833.3
+Resistance max (ohm): 340000.0
+Resistance range (ohm): 284166.7
+Resistance SD (ohm): 77708.8
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.190
+Voltage min (V): 0.147
+Voltage max (V): 0.225
+Voltage range (V): 0.078
+Voltage SD (V): 0.020
+Resistance mean (ohm): 25566.9
+Resistance min (ohm): 21239.1
+Resistance max (ohm): 33100.0
+Resistance range (ohm): 11860.9
+Resistance SD (ohm): 2961.9
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 1.377
+Voltage min (V): 1.266
+Voltage max (V): 1.442
+Voltage range (V): 0.176
+Voltage SD (V): 0.027
+Resistance mean (ohm): 2633.8
+Resistance min (ohm): 2467.8
+Resistance max (ohm): 2949.8
+Resistance range (ohm): 482.0
+Resistance SD (ohm): 73.6
+
+
+Sensor + silicon coating v1 on prosthesis finger v1, force measured with balance, finger parallel to plane
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.000
+Voltage min (V): 0.000
+Voltage max (V): 0.000
+Voltage range (V): 0.000
+Voltage SD (V): 0.000
+Resistance: invalid (ADC = 0)
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.254
+Voltage min (V): 0.181
+Voltage max (V): 0.381
+Voltage range (V): 0.200
+Voltage SD (V): 0.041
+Resistance mean (ohm): 19136.6
+Resistance min (ohm): 12115.4
+Resistance max (ohm): 26648.6
+Resistance range (ohm): 14533.3
+Resistance SD (ohm): 3007.4
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 1.138
+Voltage min (V): 0.934
+Voltage max (V): 1.237
+Voltage range (V): 0.303
+Voltage SD (V): 0.057
+Resistance mean (ohm): 3405.8
+Resistance min (ohm): 3043.5
+Resistance max (ohm): 4356.0
+Resistance range (ohm): 1312.5
+Resistance SD (ohm): 236.9
+
+
+Bare sensor on prothesis finger v2 (with bump to stick sensor), force measured with balance, finger parallel to plane
+
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.000
+Voltage min (V): 0.000
+Voltage max (V): 0.000
+Voltage range (V): 0.000
+Voltage SD (V): 0.000
+Resistance: invalid (ADC = 0)
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.185
+Voltage min (V): 0.147
+Voltage max (V): 0.230
+Voltage range (V): 0.083
+Voltage SD (V): 0.020
+Resistance mean (ohm): 26281.3
+Resistance min (ohm): 20766.0
+Resistance max (ohm): 33100.0
+Resistance range (ohm): 12334.0
+Resistance SD (ohm): 2904.1
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 0.378
+Voltage min (V): 0.308
+Voltage max (V): 0.415
+Voltage range (V): 0.108
+Voltage SD (V): 0.031
+Resistance mean (ohm): 12309.9
+Resistance min (ohm): 11035.3
+Resistance max (ohm): 15238.1
+Resistance range (ohm): 4202.8
+Resistance SD (ohm): 1154.6
+
+
+Sensor + silicon coating v1 on prothesis finger v2 (with bump to stick sensor), finger parallel to plane, force measured with balance (BEST)
+
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.242
+Voltage min (V): 0.220
+Voltage max (V): 0.264
+Voltage range (V): 0.044
+Voltage SD (V): 0.012
+Resistance mean (ohm): 19751.6
+Resistance min (ohm): 17944.4
+Resistance max (ohm): 21733.3
+Resistance range (ohm): 3788.9
+Resistance SD (ohm): 1070.3
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.488
+Voltage min (V): 0.406
+Voltage max (V): 0.611
+Voltage range (V): 0.205
+Voltage SD (V): 0.066
+Resistance mean (ohm): 9426.7
+Resistance min (ohm): 7184.0
+Resistance max (ohm): 11325.3
+Resistance range (ohm): 4141.3
+Resistance SD (ohm): 1325.2
+Release the sensor.
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 1.199
+Voltage min (V): 1.105
+Voltage max (V): 1.251
+Voltage range (V): 0.147
+Voltage SD (V): 0.029
+Resistance mean (ohm): 3173.1
+Resistance min (ohm): 2996.1
+Resistance max (ohm): 3526.5
+Resistance range (ohm): 530.5
+Resistance SD (ohm): 102.7
+
+
+Sensor + aluminium platform + silicon coating v1 on prothesis finger v2 (with bump to stick sensor), finger parallel to plane, force measured with balance
+
+--- RESULTS ---
+Level: L
+Voltage mean (V): 0.045
+Voltage min (V): 0.000
+Voltage max (V): 0.093
+Voltage range (V): 0.093
+Voltage SD (V): 0.024
+Resistance mean (ohm): 133523.6
+Resistance min (ohm): 52842.1
+Resistance max (ohm): 1022000.0
+Resistance range (ohm): 969157.9
+Resistance SD (ohm): 137562.5
+
+--- RESULTS ---
+Level: M
+Voltage mean (V): 0.288
+Voltage min (V): 0.264
+Voltage max (V): 0.323
+Voltage range (V): 0.059
+Voltage SD (V): 0.015
+Resistance mean (ohm): 16385.8
+Resistance min (ohm): 14500.0
+Resistance max (ohm): 17944.4
+Resistance range (ohm): 3444.4
+Resistance SD (ohm): 882.4
+
+--- RESULTS ---
+Level: H
+Voltage mean (V): 0.474
+Voltage min (V): 0.327
+Voltage max (V): 0.606
+Voltage range (V): 0.279
+Voltage SD (V): 0.080
+Resistance mean (ohm): 9865.2
+Resistance min (ohm): 7250.0
+Resistance max (ohm): 14268.7
+Resistance range (ohm): 7018.7
+Resistance SD (ohm): 1893.7
+
