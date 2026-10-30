@@ -5,8 +5,8 @@
 // 5V -> FSR -> A1 -> fixed resistor (1 kOhm) -> GND
 
 const int pinSensor = A1;          // Analog pin connected to the FSR
-const float voltajeRef = 3.3;      // ADC reference voltage in volts
-const int resolucionADC = 4095;    // Maximum ADC value for a 10-bit Arduino
+const float voltajeRef = 5;      // ADC reference voltage in volts
+const int resolucionADC = 1023;    // Maximum ADC value for a 10-bit Arduino
 const float resistenciaFija = 1000.0; // Fixed resistor value in ohms
 
 const int nSamples = 250;          // Number of measurements per test
