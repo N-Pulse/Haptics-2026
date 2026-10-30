@@ -114,7 +114,7 @@ The following configurations were investigated:
 
 The following tables report the mean voltage and resistance for each pressure level. Resistance values are expressed in kΩ for readability.
 
-### Configuration 1 – Bare FSR on Ana's anatomical finger
+### Configuration 1 – Bare FSR on anatomical finger
 
 | Parameter | Light | Medium | Heavy |
 |---|---:|---:|---:|
@@ -125,7 +125,7 @@ The following tables report the mean voltage and resistance for each pressure le
 | Resistance SD (kΩ) | 76.13 | 1.45 | 0.42 |
 | Resistance range (kΩ) | 974.29 | 7.94 | 1.84 |
 
-### Configuration 2 – FSR with silicone coating v1 on Ana's anatomical finger
+### Configuration 2 – FSR with silicone coating v1 on anatomical finger
 
 | Parameter | Light | Medium | Heavy |
 |---|---:|---:|---:|
@@ -204,8 +204,6 @@ The main findings are:
 Based on these exploratory measurements, **the silicone-coated FSR mounted on prosthesis finger v2, using the attachment bump without the aluminium platform (Configuration 5), is the preferred configuration for further testing.**
 
 It provides the clearest separation between the three pressure levels among the tested prosthesis configurations, while maintaining relatively low voltage variability at light and heavy pressure.
-
-However, this selection is preliminary. Repeated measurements are necessary to assess repeatability, variability between trials, and robustness of the sensor response.
 
 ## 8.4 Next steps
 
