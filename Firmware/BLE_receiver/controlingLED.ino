@@ -9,6 +9,8 @@ void updateHotLED(int hotPin, float temp) {
   digitalWrite(hotPin, temp > TEMP_THRESHOLD_C ? HIGH : LOW);
 }
 
+
+//only updates if turns on and off 
 void updateBluetoothLED(int bluetoothPin, bool isConnected) {
   digitalWrite(bluetoothPin, isConnected ? HIGH : LOW);
 }

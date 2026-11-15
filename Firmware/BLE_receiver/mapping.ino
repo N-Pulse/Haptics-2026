@@ -1,4 +1,3 @@
-
 // will be replaced with real min/max once you've tested actual sensors on hardware
 const int PRESSURE_MIN = 0;
 const int PRESSURE_MAX = 4000;
